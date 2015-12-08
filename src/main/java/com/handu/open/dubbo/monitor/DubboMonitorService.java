@@ -115,8 +115,10 @@ public class DubboMonitorService implements MonitorService {
         
         int  totalNum =  statistics.getParameter(SUCCESS, 0) +statistics.getParameter(FAILURE, 0);
         
-        if( totalNum>0 &&  totalNum*slowElapse> statistics.getParameter(ELAPSED, 0))
-        	return;
+        if(statistics.getParameter(FAILURE, 0) <=0 ){
+	        if( totalNum>0 &&  totalNum*slowElapse> statistics.getParameter(ELAPSED, 0))
+	        	return;
+        }
         
         String timestamp = statistics.getParameter(Constants.TIMESTAMP_KEY);
         Date now;

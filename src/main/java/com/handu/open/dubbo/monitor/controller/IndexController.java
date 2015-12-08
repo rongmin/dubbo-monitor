@@ -79,7 +79,7 @@ public class IndexController {
         successDubboInvokeLineChart.setxAxisCategories(sxAxisCategories);
         successDubboInvokeLineChart.setSeriesData(Arrays.asList(slineChartSeries));
         successDubboInvokeLineChart.setChartType("SUCCESS");
-        successDubboInvokeLineChart.setTitle("最慢次数最多的30条");
+        successDubboInvokeLineChart.setTitle("最慢次数最多的30条，也包括调用失败的。");
         successDubboInvokeLineChart.setyAxisTitle("次数");
         dubboInvokeLineChartList.add(successDubboInvokeLineChart);
 
@@ -99,7 +99,7 @@ public class IndexController {
         failureDubboInvokeLineChart.setxAxisCategories(fxAxisCategories);
         failureDubboInvokeLineChart.setSeriesData(Arrays.asList(flineChartSeries));
         failureDubboInvokeLineChart.setChartType("FAILURE");
-        failureDubboInvokeLineChart.setTitle("The Top 20 of Invoke Failure");
+        failureDubboInvokeLineChart.setTitle("调用失败的次数最多的30条");
         failureDubboInvokeLineChart.setyAxisTitle("t");
         dubboInvokeLineChartList.add(failureDubboInvokeLineChart);
 

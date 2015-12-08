@@ -236,6 +236,6 @@
             AND dubbo_invoke.type = #{type}
         </if>
         GROUP BY dubbo_invoke.service, dubbo_invoke.method
-        ORDER BY SUM(dubbo_invoke.failure)  DESC LIMIT 20
+        ORDER BY SUM(dubbo_invoke.failure)  DESC LIMIT 30
     </select>
 </mapper>
