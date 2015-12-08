@@ -15,6 +15,20 @@
  */
 package com.handu.open.dubbo.monitor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.springframework.stereotype.Service;
+
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.ConcurrentHashSet;
@@ -22,12 +36,6 @@ import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.RegistryService;
-import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * RegistryContainer

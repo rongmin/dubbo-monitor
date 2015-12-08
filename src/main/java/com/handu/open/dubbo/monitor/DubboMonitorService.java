@@ -15,6 +15,19 @@
  */
 package com.handu.open.dubbo.monitor;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
+
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.logger.Logger;
@@ -26,16 +39,6 @@ import com.google.common.collect.Maps;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.support.Dao;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.StringUtils;
-
-import javax.annotation.PostConstruct;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * MonitorService
@@ -66,9 +69,18 @@ public class DubboMonitorService implements MonitorService {
 
     @Autowired
     private Dao dao;
+    
 
+    @Autowired
+    Environment env;
+
+    long slowElapse=0;
+    
     @PostConstruct
     private void init() {
+    	slowElapse = new Long(env.getProperty("monitor.slowElapse", "0"));
+    	logger.info(" slowElapse: " + slowElapse);
+    	
         queue = new LinkedBlockingQueue<URL>(Integer.parseInt(ConfigUtils.getProperty("dubbo.monitor.queue", "100000")));
         writeThread = new Thread(new Runnable() {
             public void run() {
@@ -100,6 +112,12 @@ public class DubboMonitorService implements MonitorService {
         if (POISON_PROTOCOL.equals(statistics.getProtocol())) {
             return;
         }
+        
+        int  totalNum =  statistics.getParameter(SUCCESS, 0) +statistics.getParameter(FAILURE, 0);
+        
+        if( totalNum>0 &&  totalNum*slowElapse> statistics.getParameter(ELAPSED, 0))
+        	return;
+        
         String timestamp = statistics.getParameter(Constants.TIMESTAMP_KEY);
         Date now;
         if (timestamp == null || timestamp.length() == 0) {

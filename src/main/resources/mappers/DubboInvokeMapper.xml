@@ -3,7 +3,7 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handu.open.dubbo.monitor.DubboMonitorService">
 
-    <sql id="allOfDubboInvoke">
+    <!-- id="allOfDubboInvoke">
         id,
         invoke_date as invokeDate,
         service,
@@ -18,7 +18,7 @@
         concurrent,
         max_elapsed as maxElapsed,
         max_concurrent as maxConcurrent
-    </sql>
+    </sql-->
     
     <sql id="allNoAsOfDubboInvoke">
         id,
@@ -200,7 +200,7 @@
             AND dubbo_invoke.type = #{type}
         </if>
         GROUP BY dubbo_invoke.service, dubbo_invoke.method
-        ORDER BY SUM(dubbo_invoke.success)  DESC LIMIT 20
+        ORDER BY SUM(dubbo_invoke.success)  DESC LIMIT 30
     </select>
 
     <select id="countDubboInvokeFailureTopTen" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">

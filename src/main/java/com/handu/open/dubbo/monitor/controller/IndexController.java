@@ -79,8 +79,8 @@ public class IndexController {
         successDubboInvokeLineChart.setxAxisCategories(sxAxisCategories);
         successDubboInvokeLineChart.setSeriesData(Arrays.asList(slineChartSeries));
         successDubboInvokeLineChart.setChartType("SUCCESS");
-        successDubboInvokeLineChart.setTitle("The Top 20 of Invoke Success");
-        successDubboInvokeLineChart.setyAxisTitle("t");
+        successDubboInvokeLineChart.setTitle("最慢次数最多的30条");
+        successDubboInvokeLineChart.setyAxisTitle("次数");
         dubboInvokeLineChartList.add(successDubboInvokeLineChart);
 
         DubboInvokeLineChart failureDubboInvokeLineChart = new DubboInvokeLineChart();
