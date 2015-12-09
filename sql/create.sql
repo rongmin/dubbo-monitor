@@ -1,7 +1,3 @@
-SET NAMES utf8;
-SET FOREIGN_KEY_CHECKS = 0;
-
-DROP TABLE IF EXISTS `dubbo_invoke`;
 CREATE TABLE `dubbo_invoke` (
   `id` varchar(255) NOT NULL DEFAULT '',
   `invoke_date` date NOT NULL,
@@ -20,6 +16,4 @@ CREATE TABLE `dubbo_invoke` (
   PRIMARY KEY (`id`),
   KEY `index_service` (`service`) USING BTREE,
   KEY `index_method` (`method`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
-
-SET FOREIGN_KEY_CHECKS = 1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;

@@ -1,0 +1,22 @@
+第一步：  建立新库：dubbo monitor
+ 第二步： 建立新表：create.sql
+第三步：war 修改为 dubbo-monitor.war 放到 tomcat 8.0.29 的webapps 目录下
+ 第四步： 修改文件： WEB-INF/classes/application.properties ， 如下：
+ 
+dubbo.application.name=dubbo-monitor
+dubbo.application.owner=   
+dubbo.registry.address=zookeeper://192.168.48.6:2181
+dubbo.protocol.port=6060
+
+# Database Settings
+db.url=jdbc:mysql://192.168.48.6:3306/docker_dubbomonitor?prepStmtCacheSize=517&cachePrepStmts=true&autoReconnect=true&characterEncoding=utf-8
+db.username=dockertest
+db.password=CZgF1ekxxs
+db.maxActive=20  -->最大20就可以了。
+
+# m sec
+monitor.slowElapse=1000  -->毫秒， 一次统计（指多次请求）中的平均时间的最小值。
+ 
+ 
+ 第五步： accounts.mxl  里面有账号和密码。 是明文的
+ 
