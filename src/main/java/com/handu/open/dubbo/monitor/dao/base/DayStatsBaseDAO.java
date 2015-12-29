@@ -43,6 +43,4 @@ public class DayStatsBaseDAO extends SqlSessionDaoSupport {
 	public Long getDayStatByInvokeDateAndMethod(DayStats ds) {
 		return getSqlSession().selectOne("monitor.getDayStatByInvokeDateAndMethod", ds);
 	}
-	
-	
 }

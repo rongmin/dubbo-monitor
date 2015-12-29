@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.service;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -20,6 +21,7 @@ import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 
 @Component
 public class DayStatsService {
+
 	
 	private static Logger logger = Logger.getLogger(DayStatsService.class);
 
@@ -38,6 +40,7 @@ public class DayStatsService {
 		long methodId = configDAO.getMethodId(serviceId, di.getMethod());
 
 		String key = makeKey(di.getInvokeDate(), appId, serviceId, methodId);
+
 
 		
 		synchronized (map) {
@@ -91,6 +94,7 @@ public class DayStatsService {
 		
 		for(DayStats ds:kk){		
 			dayStatsDAO.saveOrUpdate(ds);
+
 		}
 		
 	}
@@ -105,6 +109,7 @@ public class DayStatsService {
 			ds.setFailureConsumer(ds.getFailureConsumer()+di.getFailure());
 			ds.setElapsedConsumer(ds.getElapsedConsumer()+di.getElapsed());
 		}
+
 	}
 
 	private String makeKey(Date invokeDate, long appId, long serviceId,

@@ -17,7 +17,6 @@ public class DayStatsDAO {
 	private DayStatsBaseDAO dayStatsBaseDAO;
 	
 	public void saveOrUpdate(DayStats ds){
-		
 		Long id = dayStatsBaseDAO.getDayStatByInvokeDateAndMethod(ds);
 		
 		if(id.longValue() > 0){

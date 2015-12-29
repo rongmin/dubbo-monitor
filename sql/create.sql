@@ -33,6 +33,7 @@ CREATE TABLE `day_stats` (
   `success_consumer` int(11) NOT NULL,
   `failure_consumer` int(11) NOT NULL,
   `elapsed_consumer` int(11) NOT NULL,
+
   UNIQUE KEY `invoke_date_method` (`invoke_date`, `method_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 

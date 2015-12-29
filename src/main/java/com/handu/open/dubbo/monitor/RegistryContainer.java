@@ -310,5 +310,4 @@ public class RegistryContainer {
 	@PreDestroy
 	public void stop() {
 	}
-
 }
