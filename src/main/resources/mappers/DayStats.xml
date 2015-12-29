@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="monitor">
+
+	<!-- Add -->
+	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
+		insert into
+		day_stats ( invoke_date ,app_id, service_id, method_id,
+		success_provider,
+		failure_provider ,
+		elapsed_provider ,
+		success_consumer ,
+		failure_consumer ,
+		elapsed_consumer )
+		values(
+		#{invokeDate}, #{appId},#{serviceId},#{methodId},
+		#{successProvider},
+		#{failureProvider},
+		#{elapsedProvider},
+		#{successConsumer},
+		#{failureConsumer},
+		#{elapsedConsumer}
+		)
+		<selectKey keyProperty="id" resultType="java.lang.Long">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+	</insert>
+
+	<update id="updateDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
+		update
+		day_stats set
+		success_provider = success_provider + #{successProvider},
+		failure_provider = failure_provider + #{failureProvider} ,
+		elapsed_provider = elapsed_provider + #{elapsedProvider},
+		success_consumer = success_consumer + #{successConsumer},
+		failure_consumer = failure_consumer + #{failureConsumer},
+		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} where id = #id#
+	</update>
+
+	<select id="getAllDayStats"
+		resultType="com.handu.open.dubbo.monitor.domain.DayStats">
+		SELECT id,
+		invoke_date as invokeDate,
+		app_id as appId,
+		service_id as serviceId,
+		method_id as methodId,
+		success_provider as successProvider,
+		failure_provider as failureProvider ,
+		elapsed_provider as elapsedProvider,
+		success_consumer as successConsumer,
+		failure_consumer as failureConsumer,
+		elapsed_consumer as elapsedConsumer		
+		FROM day_stats
+	</select>	
+	
+	<select id="getDayStatByInvokeDateAndMethod" resultType="java.lang.Long">
+		SELECT id	FROM day_stats where invoke_date = #{invokeDate} and   method_id = #{methodId}
+	</select>
+	
+</mapper>

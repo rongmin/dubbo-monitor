@@ -24,20 +24,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.dubbo.common.Constants;
 import com.alibaba.dubbo.common.URL;
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
 import com.alibaba.dubbo.common.utils.ConfigUtils;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.alibaba.dubbo.monitor.MonitorService;
 import com.google.common.collect.Maps;
+import com.handu.open.dubbo.monitor.dao.base.DubboInvokeBaseDAO;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
-import com.handu.open.dubbo.monitor.support.Dao;
+import com.handu.open.dubbo.monitor.service.DayStatsService;
 import com.handu.open.dubbo.monitor.support.UuidUtil;
 
 /**
@@ -48,7 +48,8 @@ import com.handu.open.dubbo.monitor.support.UuidUtil;
 @Service(delay = -1)
 public class DubboMonitorService implements MonitorService {
 
-    private static final Logger logger = LoggerFactory.getLogger(DubboMonitorService.class);
+    private static Logger logger = Logger.getLogger(DubboMonitorService.class);
+    
 
     public static final String CLASSNAME = DubboMonitorService.class.getName() + ".";
 
@@ -68,8 +69,10 @@ public class DubboMonitorService implements MonitorService {
     private RegistryContainer registryContainer;
 
     @Autowired
-    private Dao dao;
+    private DubboInvokeBaseDAO dubboInvokeDAO;
     
+    @Autowired
+    DayStatsService dayStats;
 
     @Autowired
     Environment env;
@@ -79,11 +82,12 @@ public class DubboMonitorService implements MonitorService {
     @PostConstruct
     private void init() {
     	slowElapse = new Long(env.getProperty("monitor.slowElapse", "0"));
-    	logger.info(" slowElapse: " + slowElapse);
-    	
+    	    	
         queue = new LinkedBlockingQueue<URL>(Integer.parseInt(ConfigUtils.getProperty("dubbo.monitor.queue", "100000")));
         writeThread = new Thread(new Runnable() {
             public void run() {
+            	logger.info(" slowElapse: " + slowElapse);
+            	
                 while (running) {
                     try {
                         writeToDataBase(); // 记录统计日志
@@ -111,13 +115,6 @@ public class DubboMonitorService implements MonitorService {
         URL statistics = queue.take();
         if (POISON_PROTOCOL.equals(statistics.getProtocol())) {
             return;
-        }
-        
-        int  totalNum =  statistics.getParameter(SUCCESS, 0) +statistics.getParameter(FAILURE, 0);
-        
-        if(statistics.getParameter(FAILURE, 0) <=0 ){
-	        if( totalNum>0 &&  totalNum*slowElapse> statistics.getParameter(ELAPSED, 0))
-	        	return;
         }
         
         String timestamp = statistics.getParameter(Constants.TIMESTAMP_KEY);
@@ -154,9 +151,9 @@ public class DubboMonitorService implements MonitorService {
             dubboInvoke.setService(statistics.getServiceInterface());
             dubboInvoke.setMethod(statistics.getParameter(METHOD));
             dubboInvoke.setInvokeTime(statistics.getParameter(TIMESTAMP, System.currentTimeMillis()));
-            dubboInvoke.setSuccess(statistics.getParameter(SUCCESS, 0));
-            dubboInvoke.setFailure(statistics.getParameter(FAILURE, 0));
-            dubboInvoke.setElapsed(statistics.getParameter(ELAPSED, 0));
+            dubboInvoke.setSuccess(new Integer(statistics.getParameter(SUCCESS, 0)));
+            dubboInvoke.setFailure(new Integer(statistics.getParameter(FAILURE, 0)));
+            dubboInvoke.setElapsed(new Integer(statistics.getParameter(ELAPSED, 0)));
             dubboInvoke.setConcurrent(statistics.getParameter(CONCURRENT, 0));
             dubboInvoke.setMaxElapsed(statistics.getParameter(MAX_ELAPSED, 0));
             dubboInvoke.setMaxConcurrent(statistics.getParameter(MAX_CONCURRENT, 0));
@@ -164,7 +161,17 @@ public class DubboMonitorService implements MonitorService {
                     && dubboInvoke.getConcurrent() == 0 && dubboInvoke.getMaxElapsed() == 0 && dubboInvoke.getMaxConcurrent() == 0) {
                 return;
             }
-            dao.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);
+            
+            long  totalNum =  dubboInvoke.getSuccess()+ dubboInvoke.getFailure();
+            
+            if(dubboInvoke.getFailure() >0 ){
+    	        if( totalNum>0 &&  totalNum*slowElapse < dubboInvoke.getElapsed() )
+    	        	dubboInvokeDAO.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);
+    	        	return;
+            }
+            
+            
+            dayStats.add(statistics.getParameter(Constants.APPLICATION_KEY),dubboInvoke);
 
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
@@ -194,11 +201,11 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
-        return dao.getList(CLASSNAME, "countDubboInvoke", dubboInvoke);
+        return dubboInvokeDAO.getList(CLASSNAME, "countDubboInvoke", dubboInvoke);
     }
 
     public List<String> getMethodsByService(DubboInvoke dubboInvoke) {
-        return dao.getList(CLASSNAME, "getMethodsByService", dubboInvoke);
+        return dubboInvokeDAO.getList(CLASSNAME, "getMethodsByService", dubboInvoke);
     }
 
     /**
@@ -213,7 +220,7 @@ public class DubboMonitorService implements MonitorService {
             logger.error("统计查询缺少必要参数！");
             throw new RuntimeException("统计查询缺少必要参数！");
         }
-        return dao.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
+        return dubboInvokeDAO.getList(CLASSNAME, "countDubboInvokeInfo", dubboInvoke);
     }
 
     /**
@@ -224,8 +231,8 @@ public class DubboMonitorService implements MonitorService {
      */
     public Map<String, List> countDubboInvokeTopTen(DubboInvoke dubboInvoke) {
         Map<String, List> result = Maps.newHashMap();
-        result.put("success", dao.getList(CLASSNAME, "countDubboInvokeSuccessTopTen", dubboInvoke));
-        result.put("failure", dao.getList(CLASSNAME, "countDubboInvokeFailureTopTen", dubboInvoke));
+        result.put("success", dubboInvokeDAO.getList(CLASSNAME, "countDubboInvokeSuccessTopTen", dubboInvoke));
+        result.put("failure", dubboInvokeDAO.getList(CLASSNAME, "countDubboInvokeFailureTopTen", dubboInvoke));
         return result;
     }
 }

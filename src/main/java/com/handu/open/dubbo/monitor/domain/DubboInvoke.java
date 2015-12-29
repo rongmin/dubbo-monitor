@@ -28,7 +28,12 @@ import java.util.Date;
  */
 public class DubboInvoke implements Serializable {
 
-    private String id;
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = -8434017403698927503L;
+
+	private String id;
 
     private Date invokeDate;
 
@@ -42,13 +47,55 @@ public class DubboInvoke implements Serializable {
 
     private String type;
 
-    private double success;
+    private int success;
 
-    private double failure;
+    private int failure;
 
-    private double elapsed;
+    private int elapsed;
 
-    private int concurrent;
+    /**
+	 * @return the success
+	 */
+	public int getSuccess() {
+		return success;
+	}
+
+	/**
+	 * @param success the success to set
+	 */
+	public void setSuccess(int success) {
+		this.success = success;
+	}
+
+	/**
+	 * @return the failure
+	 */
+	public int getFailure() {
+		return failure;
+	}
+
+	/**
+	 * @param failure the failure to set
+	 */
+	public void setFailure(int failure) {
+		this.failure = failure;
+	}
+
+	/**
+	 * @return the elapsed
+	 */
+	public int getElapsed() {
+		return elapsed;
+	}
+
+	/**
+	 * @param elapsed the elapsed to set
+	 */
+	public void setElapsed(int elapsed) {
+		this.elapsed = elapsed;
+	}
+
+	private int concurrent;
 
     private int maxElapsed;
 
@@ -150,30 +197,7 @@ public class DubboInvoke implements Serializable {
     }
 
 
-    public double getSuccess() {
-        return success;
-    }
-
-    public void setSuccess(double success) {
-        this.success = success;
-    }
-
-    public double getFailure() {
-        return failure;
-    }
-
-    public void setFailure(double failure) {
-        this.failure = failure;
-    }
-
-    public double getElapsed() {
-        return elapsed;
-    }
-
-    public void setElapsed(double elapsed) {
-        this.elapsed = elapsed;
-    }
-
+    
     public int getConcurrent() {
         return concurrent;
     }

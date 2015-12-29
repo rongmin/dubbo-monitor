@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="monitor">
+    
+    <!-- Add -->
+    <insert id="addApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+        insert into
+        application_service_method (     service_id,  name,maxtime_provider, maxtime_consumer  )
+        values( #{serviceId}, #{name}, #{maxtimeProvider},#{maxtimeConsumer} )
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+	    	SELECT LAST_INSERT_ID()
+	    </selectKey>
+    </insert>
+
+
+    <select id="getAllApplicationServiceMethod" resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+        SELECT id, service_id as serviceId,name,
+        maxtime_provider as maxtimeProvider,
+        maxtime_consumer as maxtimeConsumer
+         FROM application_service_method
+    </select>
+</mapper>

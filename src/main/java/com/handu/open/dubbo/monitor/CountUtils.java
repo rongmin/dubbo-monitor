@@ -15,14 +15,15 @@
  */
 package com.handu.open.dubbo.monitor;
 
-import com.alibaba.dubbo.common.logger.Logger;
-import com.alibaba.dubbo.common.logger.LoggerFactory;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
+
+import org.apache.log4j.Logger;
+
+
 
 /**
  * CountUtils
@@ -31,7 +32,7 @@ import java.util.regex.Pattern;
  */
 public final class CountUtils {
 
-    private static final Logger logger = LoggerFactory.getLogger(CountUtils.class);
+	private static Logger logger = Logger.getLogger(CountUtils.class);
 
     private static final Pattern NUMBER_PATTERN = Pattern.compile("\\d+");
 
