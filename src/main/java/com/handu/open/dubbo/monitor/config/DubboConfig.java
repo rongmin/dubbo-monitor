@@ -51,7 +51,7 @@ public class DubboConfig {
     public ApplicationConfig applicationConfig() {
         ApplicationConfig applicationConfig = new ApplicationConfig();
         applicationConfig.setName(env.getProperty(APPLICATION_NAME, "dubbo-monitor"));
-        applicationConfig.setOwner(env.getProperty(APPLICATION_OWNER));
+        applicationConfig.setOwner(env.getProperty(APPLICATION_OWNER));        
         return applicationConfig;
     }
 

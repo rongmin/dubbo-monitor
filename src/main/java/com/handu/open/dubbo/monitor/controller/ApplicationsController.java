@@ -17,7 +17,9 @@ package com.handu.open.dubbo.monitor.controller;
 
 import com.alibaba.dubbo.common.URL;
 import com.handu.open.dubbo.monitor.RegistryContainer;
+import com.handu.open.dubbo.monitor.dao.ConfigDAO;
 import com.handu.open.dubbo.monitor.domain.DubboApplication;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,10 +44,14 @@ public class ApplicationsController {
 
     @Autowired
     private RegistryContainer registryContainer;
+    
+    @Autowired
+    ConfigDAO configDAO;
 
     @RequestMapping(method = RequestMethod.GET)
     public String index(Model model) {
         Set<String> applications = registryContainer.getApplications();
+        
         List<DubboApplication> rows = new ArrayList<DubboApplication>();
         DubboApplication dubboApplication;
         if (applications != null && applications.size() > 0) {
