@@ -111,6 +111,8 @@ public class DubboMonitorService implements MonitorService {
      *
      * @throws Exception
      */
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+    SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMdd");
     private void writeToDataBase() throws Exception {
         URL statistics = queue.take();
         if (POISON_PROTOCOL.equals(statistics.getProtocol())) {
@@ -122,10 +124,12 @@ public class DubboMonitorService implements MonitorService {
         if (timestamp == null || timestamp.length() == 0) {
             now = new Date();
         } else if (timestamp.length() == "yyyyMMddHHmmss".length()) {
-            now = new SimpleDateFormat("yyyyMMddHHmmss").parse(timestamp);
+            now = sdf.parse(timestamp);
         } else {
             now = new Date(Long.parseLong(timestamp));
         }
+        now =  ymd.parse(ymd.format(now));
+        
         DubboInvoke dubboInvoke = new DubboInvoke();
 
         dubboInvoke.setId(UuidUtil.createUUID());

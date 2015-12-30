@@ -1,6 +1,6 @@
 package com.handu.open.dubbo.monitor.service;
 
-
+	
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -72,7 +72,8 @@ public class DayStatsService {
                         logger.error("saveDataToDisk  failed , sleep 10分钟, cause: " + t.getMessage(), t);                        
                     }
                     try {
-                        Thread.sleep(600000); 
+                        Thread.sleep(600); 
+                        //Thread.sleep(600000); 
                     } catch (Throwable t2) {
                     }
                 }

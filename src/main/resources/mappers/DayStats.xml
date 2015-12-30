@@ -36,7 +36,7 @@
 		elapsed_provider = elapsed_provider + #{elapsedProvider},
 		success_consumer = success_consumer + #{successConsumer},
 		failure_consumer = failure_consumer + #{failureConsumer},
-		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} where id = #id#
+		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} where id = #{id}#
 	</update>
 
 	<select id="getAllDayStats"

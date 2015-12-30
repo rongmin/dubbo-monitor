@@ -2,6 +2,7 @@ package com.handu.open.dubbo.monitor.dao;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod;
 @Component
 public class ConfigDAO {
 
+	private static Logger logger = Logger.getLogger(ConfigDAO.class);  
 	@Autowired
 	private ApplicationBaseDAO applicationBaseDAO;
 
@@ -47,6 +49,11 @@ public class ConfigDAO {
 			as.setName(str);
 			applicationServiceBaseDAO.insert(as);
 			id = as.getId();
+			if(id==null){
+				logger.info("  ok "  + id  );
+			}else{
+				logger.info("  isert id:=  "  + id  );
+			}
 		}
 		return id;
 	}

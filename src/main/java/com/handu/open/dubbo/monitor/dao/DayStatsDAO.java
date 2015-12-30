@@ -19,7 +19,7 @@ public class DayStatsDAO {
 	public void saveOrUpdate(DayStats ds){
 		Long id = dayStatsBaseDAO.getDayStatByInvokeDateAndMethod(ds);
 		
-		if(id.longValue() > 0){
+		if(id!=null && id.longValue() > 0){
 			ds.setId(id);
 			dayStatsBaseDAO.update(ds);
 		}else{
