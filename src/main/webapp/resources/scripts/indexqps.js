@@ -55,49 +55,67 @@ function drawCharts(data) {
 
 function drawChart(data) {
     $('#TOP-' + data.chartType).highcharts({
-        chart: {
-            type: 'column',
-            zoomType: 'x'
-        }, title: {
-            text: data.title, x: -20 //center
-        }, subtitle: {
+    	chart: {
+            zoomType: 'xy'
+        },
+        title: {
+            text:  data.title, x: -20 //center
+        },
+        subtitle: {
             text: data.subtitle, x: -20
-        }, xAxis: {
+        },
+        xAxis: [{
             categories: data.xAxisCategories,
+            crosshair: true,
             labels: {
-                rotation: -45,
+                rotation: -75,
                 align: 'right',
                 style: {
                     fontSize: '13px',
                     fontFamily: 'Verdana, sans-serif'
                 }
             }
-        }, yAxis: {
-            min: 0, title: {
-                text: data.yAxisTitle
-            }, plotLines: [{
-                value: 0, width: 1, color: '#808080'
-            }]
-        }, tooltip: {
-            xDateFormat: '%Y-%m-%d, %A', valueSuffix: data.yAxisTitle,
-            style: {
-                fontSize: '13px',
-                fontFamily: 'Verdana, sans-serif'
-            }
-        },plotOptions: {
-            series: {
-                dataLabels: {
-                    enabled: true,
-
-                    color: '#FFFFFF',
-
-                    style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif',
-                        textShadow: '0 0 3px black'
-                    }
+        }],
+        yAxis: [{ // Primary yAxis
+            labels: {
+                format: '{value}',
+                style: {
+                    color: Highcharts.getOptions().colors[1]
+                }
+            },
+            title: {
+                text: data.yAxisTitle,
+                style: {
+                    color: Highcharts.getOptions().colors[1]
                 }
             }
-        },series: data.seriesData
+        }, { // Secondary yAxis
+            title: {
+                text: "平均响应时间(ms)",
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            labels: {
+                format: '{value}',
+                style: {
+                    color: Highcharts.getOptions().colors[0]
+                }
+            },
+            opposite: true
+        }],
+        tooltip: {
+            shared: true
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'left',
+            x: 120,
+            verticalAlign: 'top',
+            y: 100,
+            floating: true,
+            backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+        },
+        series:data.seriesData   
     });
 }

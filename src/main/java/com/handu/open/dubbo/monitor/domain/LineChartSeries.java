@@ -21,29 +21,44 @@ import java.util.List;
 /**
  * Line Chart Series
  *
- * @author Zhiguo.Chen <me@chenzhiguo.cn>
- *         Created on 15/6/30.
+ * @author Zhiguo.Chen <me@chenzhiguo.cn> Created on 15/6/30.
  */
 public class LineChartSeries implements Serializable {
 
-    private String name;
+	private String name;
+	private String type;
 
-    private List<double[]> data;
+	/**
+	 * @return the type
+	 */
+	public String getType() {
+		return type;
+	}
 
-    public String getName() {
-        return name;
-    }
+	/**
+	 * @param type
+	 *            the type to set
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	private List<double[]> data;
 
-    public List<double[]> getData() {
-        return data;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setData(List<double[]> data) {
-        this.data = data;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<double[]> getData() {
+		return data;
+	}
+
+	public void setData(List<double[]> data) {
+		this.data = data;
+	}
 
 }

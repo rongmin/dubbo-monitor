@@ -72,9 +72,9 @@ public class QPSController {
         List<StatsSum>  applicationList = map.get("application");
         
         double[] data;
-        makeBarData(dubboInvokeLineChartList, map.get("application"),"访问次数：application级别统计","application");
-        makeBarData(dubboInvokeLineChartList, map.get("service"),"访问次数：service(java interface)级别统计","service");
-        makeBarData(dubboInvokeLineChartList, map.get("method"),"访问次数：method级别统计","method");
+        makeBarLineData(dubboInvokeLineChartList, map.get("application"),"访问次数：application级别统计","application");
+        makeBarLineData(dubboInvokeLineChartList, map.get("service"),"访问次数：service(java interface)级别统计","service");
+        makeBarLineData(dubboInvokeLineChartList, map.get("method"),"访问次数：method级别统计","method");
         
         
         
@@ -107,16 +107,21 @@ public class QPSController {
         return commonResponse;
     }
 
-	private void makeBarData(
+	private void makeBarLineData(
 			List<DubboInvokeLineChart> dubboInvokeLineChartList,
 			List<StatsSum> applicationList,String title,String divId) {
 		DubboInvokeLineChart successDubboInvokeLineChart = new DubboInvokeLineChart();
         List<String> sxAxisCategories = Lists.newArrayList();
         LineChartSeries slineChartSeries = new LineChartSeries();
         LineChartSeries slineChartSeries2 = new LineChartSeries();
+        LineChartSeries slineChartSeries3 = new LineChartSeries();
+        LineChartSeries slineChartSeries4 = new LineChartSeries();
+        
         List<double[]> sdataList = Lists.newArrayList();
         List<double[]> sdataList2 = Lists.newArrayList();
-        double[] data,data2;
+        List<double[]> sdataList3 = Lists.newArrayList();
+        List<double[]> sdataList4 = Lists.newArrayList();
+        double[] data,data2,data3,data4;
         
         for (StatsSum ss :applicationList ) {
             sxAxisCategories.add(ss.getName());
@@ -124,15 +129,45 @@ public class QPSController {
             sdataList.add(data);
             data2 = new double[]{ss.getNumConsumer()};
             sdataList2.add(data2);
+
+            if(ss.getNumProvider()>0){
+            	data3 = new double[]{ss.getElapsedProvider()/ss.getNumProvider()};
+            }else{
+            	data3 = new double[]{0};
+            }
+            
+            sdataList3.add(data3);
+            
+            if(ss.getNumConsumer()>0){
+            	data4 = new double[]{ss.getElapsedConsumer()/ss.getNumConsumer()};
+            }else{
+            	data4 = new double[]{0};
+            }
+            sdataList4.add(data4);
+
         }
         slineChartSeries.setData(sdataList);
-        slineChartSeries.setName("Provider");
+        slineChartSeries.setName("Provider访问次数");
+        slineChartSeries.setType("column");
         
         slineChartSeries2.setData(sdataList2);
-        slineChartSeries2.setName("Consumer");
+        slineChartSeries2.setName("Consumer访问次数");
+        slineChartSeries2.setType("column");
+        
+        slineChartSeries3.setData(sdataList);
+        slineChartSeries3.setName("Provider平均响应时间");
+        slineChartSeries3.setType("spline");
+        
+        slineChartSeries4.setData(sdataList2);
+        slineChartSeries4.setName("Consumer平均响应时间");
+        slineChartSeries4.setType("spline");
+        
+        
         List<LineChartSeries> seriesData = new ArrayList<LineChartSeries>();
         seriesData.add(slineChartSeries);
         seriesData.add(slineChartSeries2);        
+        seriesData.add(slineChartSeries3);
+        seriesData.add(slineChartSeries4);        
 
         successDubboInvokeLineChart.setxAxisCategories(sxAxisCategories);
         successDubboInvokeLineChart.setSeriesData(seriesData);

@@ -77,6 +77,8 @@ public class DayStatsDAO {
 			}
 			ss.setNumProvider(ss.getNumProvider()+ds.getSuccessProvider());
 			ss.setNumConsumer(ss.getNumConsumer()+ds.getSuccessConsumer());			
+			ss.setElapsedProvider(ss.getElapsedProvider()+ds.getElapsedProvider());
+			ss.setElapsedConsumer(ss.getElapsedConsumer()+ds.getElapsedConsumer());			
 		}
 		
 		List<StatsSum> slist = new ArrayList<StatsSum>(map.values());
@@ -96,7 +98,9 @@ public class DayStatsDAO {
 				map.put(ds.getAppId(), ss);
 			}
 			ss.setNumProvider(ss.getNumProvider()+ds.getSuccessProvider());
-			ss.setNumConsumer(ss.getNumConsumer()+ds.getSuccessConsumer());			
+			ss.setNumConsumer(ss.getNumConsumer()+ds.getSuccessConsumer());
+			ss.setElapsedProvider(ss.getElapsedProvider()+ds.getElapsedProvider());
+			ss.setElapsedConsumer(ss.getElapsedConsumer()+ds.getElapsedConsumer());						
 		}
 		
 		List<StatsSum> slist = new ArrayList<StatsSum>(map.values());
@@ -118,7 +122,9 @@ public class DayStatsDAO {
 				map.put(ds.getAppId(), ss);
 			}
 			ss.setNumProvider(ss.getNumProvider()+ds.getSuccessProvider());
-			ss.setNumConsumer(ss.getNumConsumer()+ds.getSuccessConsumer());			
+			ss.setNumConsumer(ss.getNumConsumer()+ds.getSuccessConsumer());		
+			ss.setElapsedProvider(ss.getElapsedProvider()+ds.getElapsedProvider());
+			ss.setElapsedConsumer(ss.getElapsedConsumer()+ds.getElapsedConsumer());
 		}
 		
 		List<StatsSum> slist = new ArrayList<StatsSum>(map.values());

@@ -21,6 +21,37 @@ public class StatsSum implements Comparable<StatsSum> {
 	private long numProvider;
 	private long numConsumer;
 
+	private long elapsedProvider;
+	private long elapsedConsumer;
+
+	/**
+	 * @return the elapsedProvider
+	 */
+	public long getElapsedProvider() {
+		return elapsedProvider;
+	}
+
+	/**
+	 * @param elapsedProvider the elapsedProvider to set
+	 */
+	public void setElapsedProvider(long elapsedProvider) {
+		this.elapsedProvider = elapsedProvider;
+	}
+
+	/**
+	 * @return the elapsedConsumer
+	 */
+	public long getElapsedConsumer() {
+		return elapsedConsumer;
+	}
+
+	/**
+	 * @param elapsedConsumer the elapsedConsumer to set
+	 */
+	public void setElapsedConsumer(long elapsedConsumer) {
+		this.elapsedConsumer = elapsedConsumer;
+	}
+
 	/**
 	 * @return the name
 	 */
