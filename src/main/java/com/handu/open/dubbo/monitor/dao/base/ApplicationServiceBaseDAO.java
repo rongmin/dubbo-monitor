@@ -33,6 +33,7 @@ public class ApplicationServiceBaseDAO extends SqlSessionDaoSupport {
 	private List<ApplicationService> list;
 
 	private Map<String,Long>  nameIdMap  = new HashMap<String,Long>();
+	private Map<Long,ApplicationService>  idMaps  = new HashMap<Long,ApplicationService>();
 	
     @Autowired
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
@@ -43,6 +44,7 @@ public class ApplicationServiceBaseDAO extends SqlSessionDaoSupport {
         getSqlSession().insert("monitor.addApplicationService", as);
         list = null;
         nameIdMap.clear();
+        idMaps.clear();
     }
 
     public List<ApplicationService> getList() {
@@ -55,11 +57,17 @@ public class ApplicationServiceBaseDAO extends SqlSessionDaoSupport {
         return nameIdMap.get(appId+"."+str);
     }
 
+    public ApplicationService getApplicationServiceById(Long id) {
+    	initData();
+        return idMaps.get(id);
+    }
+    
     private void initData(){
     	if(list==null){
     		list = getSqlSession().selectList("monitor.getAllApplicationService");
     		for(ApplicationService as: list){
     			nameIdMap.put(as.getAppId()+"."+as.getName(), as.getId());
+    			idMaps.put(as.getId(), as);
     		}
     	}
     }

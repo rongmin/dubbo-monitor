@@ -32,6 +32,7 @@ public class ApplicationBaseDAO extends SqlSessionDaoSupport {
 
 	private List<Application> list;
 	private Map<String,Long>  nameIdMap  = new HashMap<String,Long>();
+	private Map<Long,String>  idMaps  = new HashMap<Long,String>();
 	
     @Autowired
     public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
@@ -42,23 +43,32 @@ public class ApplicationBaseDAO extends SqlSessionDaoSupport {
         getSqlSession().insert("monitor.addApplication", app);
         list =null;
         nameIdMap.clear();
+        idMaps.clear();
     }
 
     public List<Application> getList() {
-    	initDate();
+    	initData();
         return list;
     }
 
     public Long getIdByName(String str) {
-    	initDate();
+    	initData();
         return nameIdMap.get(str);
     }
     
-    private void initDate(){
+    public String getNameById(Long id) {
+    	initData();
+        return idMaps.get(id);
+    }
+    
+    
+    
+    private void initData(){
     	if(list==null){
     		list = getSqlSession().selectList("monitor.getAllApplication");
     		for(Application app:list){
     			nameIdMap.put(app.getName(), app.getId());
+    			idMaps.put(app.getId(), app.getName());
     		}
     	}
     }

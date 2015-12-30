@@ -16,12 +16,15 @@
  */
 package com.handu.open.dubbo.monitor.dao.base;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.handu.open.dubbo.monitor.domain.DayStats;
+import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 
 @Repository
 public class DayStatsBaseDAO extends SqlSessionDaoSupport {
@@ -43,4 +46,8 @@ public class DayStatsBaseDAO extends SqlSessionDaoSupport {
 	public Long getDayStatByInvokeDateAndMethod(DayStats ds) {
 		return getSqlSession().selectOne("monitor.getDayStatByInvokeDateAndMethod", ds);
 	}
+	
+	public  List<DayStats> getList(DubboInvoke dubboInvoke) {
+        return getSqlSession().selectList( "countApplication" ,dubboInvoke);
+    }
 }

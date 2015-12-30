@@ -3,6 +3,14 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="monitor">
 
+
+ <sql id="dayStatscolumntoProperty">
+         id,		invoke_date as invokeDate,		app_id as appId,		service_id as serviceId,		method_id as methodId,		success_provider as successProvider,
+		failure_provider as failureProvider ,		elapsed_provider as elapsedProvider,		success_consumer as successConsumer,		failure_consumer as failureConsumer,
+		elapsed_consumer as elapsedConsumer		
+    </sql>
+    
+    
 	<!-- Add -->
 	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
 		insert into
@@ -29,9 +37,7 @@
 
 	<update id="updateDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
 		update
-		day_stats set
-
-		success_provider = success_provider + #{successProvider},
+		day_stats set	success_provider = success_provider + #{successProvider},
 		failure_provider = failure_provider + #{failureProvider} ,
 		elapsed_provider = elapsed_provider + #{elapsedProvider},
 		success_consumer = success_consumer + #{successConsumer},
@@ -41,23 +47,29 @@
 
 	<select id="getAllDayStats"
 		resultType="com.handu.open.dubbo.monitor.domain.DayStats">
-		SELECT id,
-		invoke_date as invokeDate,
-		app_id as appId,
-		service_id as serviceId,
-		method_id as methodId,
-		success_provider as successProvider,
-		failure_provider as failureProvider ,
-		elapsed_provider as elapsedProvider,
-		success_consumer as successConsumer,
-		failure_consumer as failureConsumer,
-		elapsed_consumer as elapsedConsumer		
-		FROM day_stats
-
+		SELECT   <include refid="dayStatscolumntoProperty" /> FROM day_stats
 	</select>	
 	
 	<select id="getDayStatByInvokeDateAndMethod" resultType="java.lang.Long">
 		SELECT id	FROM day_stats where invoke_date = #{invokeDate} and   method_id = #{methodId}
 	</select>
+	
+	<select id="countApplication" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" 
+	resultType="com.handu.open.dubbo.monitor.domain.DayStats">
+        SELECT  <include refid="dayStatscolumntoProperty" />         FROM day_stats
+        WHERE         1 = 1 
+                
+        <if test="invokeDate != null">
+            AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateFrom != null">
+            AND invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+        </if>
+        <if test="invokeDateTo != null">
+            AND invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+        </if>        
+    </select>
+	
+	
 	
 </mapper>
