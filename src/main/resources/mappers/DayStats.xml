@@ -5,7 +5,7 @@
 
 
  <sql id="dayStatscolumntoProperty">
-         id,		invoke_date as invokeDate,		app_id as appId,		service_id as serviceId,		method_id as methodId,		success_provider as successProvider,
+         id,		invoke_date as invokeDate,			service_id as serviceId,		method_id as methodId,		success_provider as successProvider,
 		failure_provider as failureProvider ,		elapsed_provider as elapsedProvider,		success_consumer as successConsumer,		failure_consumer as failureConsumer,
 		elapsed_consumer as elapsedConsumer		
     </sql>
@@ -14,7 +14,7 @@
 	<!-- Add -->
 	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
 		insert into
-		day_stats ( invoke_date ,app_id, service_id, method_id,
+		day_stats ( invoke_date , service_id, method_id,
 		success_provider,
 		failure_provider ,
 		elapsed_provider ,
@@ -22,7 +22,7 @@
 		failure_consumer ,
 		elapsed_consumer )
 		values(
-		#{invokeDate}, #{appId},#{serviceId},#{methodId},
+		#{invokeDate}, #{serviceId},#{methodId},
 		#{successProvider},
 		#{failureProvider},
 		#{elapsedProvider},

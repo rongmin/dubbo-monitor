@@ -6,9 +6,9 @@
     <!-- Add -->
     <insert id="addApplicationService" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationService">
         insert into
-        application_service (  app_id,  name  )
+        application_service (    name  )
         values(
-        #{appId}, #{name} )
+        #{name} )
         <selectKey keyProperty="id" resultType="java.lang.Long">
 	    	SELECT LAST_INSERT_ID()
 	    </selectKey>
@@ -16,6 +16,6 @@
 
 
     <select id="getAllApplicationService" resultType="com.handu.open.dubbo.monitor.domain.ApplicationService">
-        SELECT id, app_id as appId, name FROM application_service
+        SELECT id, name FROM application_service
     </select>
 </mapper>

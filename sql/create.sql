@@ -24,7 +24,6 @@ drop table if exists    `day_stats`;
 CREATE TABLE `day_stats` (
   `id` bigint(20) primary key AUTO_INCREMENT,
   `invoke_date` date NOT NULL,
-  `app_id` bigint(20) NOT NULL,  
   `service_id` bigint(20) NOT NULL,  
   `method_id` bigint(20) NOT NULL,  
   `success_provider` int(11) NOT NULL,
@@ -33,25 +32,16 @@ CREATE TABLE `day_stats` (
   `success_consumer` int(11) NOT NULL,
   `failure_consumer` int(11) NOT NULL,
   `elapsed_consumer` int(11) NOT NULL,
-
   UNIQUE KEY `invoke_date_method` (`invoke_date`, `method_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 
-#服务定义标准
-drop table if exists    `application`;
-CREATE TABLE `application` (
-  `id` bigint(20) primary key AUTO_INCREMENT,  
-  `name` varchar(255) NOT NULL,
-  unique key name (name)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists    `application_service`;
 CREATE TABLE `application_service` (
-  `id` bigint(20) primary key AUTO_INCREMENT,  
-  `app_id` bigint(20) NOT NULL,
+  `id` bigint(20) primary key AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  unique key service_name (app_id,name)
+  unique key service_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 drop table if exists    `application_service_method`;

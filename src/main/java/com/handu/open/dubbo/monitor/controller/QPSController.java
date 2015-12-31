@@ -70,7 +70,6 @@ public class QPSController {
         List<DubboInvokeLineChartV2> dubboInvokeLineChartList = new ArrayList<DubboInvokeLineChartV2>();
         Map<String,List<StatsSum>> map = dayStatsDAO.getDatas(dubboInvoke);
         
-        makeBarLineData(dubboInvokeLineChartList, map.get("application"),"访问次数：application级别统计","application");
         makeBarLineData(dubboInvokeLineChartList, map.get("service"),"访问次数：service(java interface)级别统计","service");
         makeBarLineData(dubboInvokeLineChartList, map.get("method"),"访问次数：method级别统计","method");
 
@@ -95,21 +94,20 @@ public class QPSController {
         
         
         for (StatsSum ss :applicationList ) {
-            sxAxisCategories.add(ss.getName());
-        
+            sxAxisCategories.add(ss.getName());        
             
             sdataList.add(ss.getNumProvider());            
             sdataList2.add(ss.getNumConsumer());
             
 
             if(ss.getNumProvider()>0){
-            	sdataList3.add(ss.getElapsedProvider()/ss.getNumProvider());
+            	sdataList3.add(1000*ss.getElapsedProvider()/ss.getNumProvider());
             }else{
             	sdataList3.add(0L);
             }
             
             if(ss.getNumConsumer()>0){
-            	sdataList4.add(ss.getElapsedConsumer()/ss.getNumConsumer());
+            	sdataList4.add(1000*ss.getElapsedConsumer()/ss.getNumConsumer());
             }else{
             	sdataList4.add(0L);
             }
@@ -123,12 +121,12 @@ public class QPSController {
         slineChartSeries2.setType("column");
         
         slineChartSeries3.setData(sdataList3);
-        slineChartSeries3.setName("Provider平均响应时间");
+        slineChartSeries3.setName("Provider平均响应时间(微妙)");
         slineChartSeries3.setType("spline");
         slineChartSeries3.setyAxis(1);        
         
         slineChartSeries4.setData(sdataList4);
-        slineChartSeries4.setName("Consumer平均响应时间");
+        slineChartSeries4.setName("Consumer平均响应时间(微妙)");
         slineChartSeries4.setType("spline");
         slineChartSeries4.setyAxis(1);        
         

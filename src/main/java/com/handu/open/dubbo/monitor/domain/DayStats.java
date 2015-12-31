@@ -28,7 +28,7 @@ public class DayStats implements Serializable {
 	private long id;
 
 	private Date invokeDate;
-	private long appId, serviceId, methodId;
+	private long serviceId, methodId;
 	private int successProvider, failureProvider, elapsedProvider;
 	private int successConsumer, failureConsumer, elapsedConsumer;
 
@@ -63,20 +63,6 @@ public class DayStats implements Serializable {
 		this.invokeDate = invokeDate;
 	}
 
-	/**
-	 * @return the appId
-	 */
-	public long getAppId() {
-		return appId;
-	}
-
-	/**
-	 * @param appId
-	 *            the appId to set
-	 */
-	public void setAppId(long appId) {
-		this.appId = appId;
-	}
 
 	/**
 	 * @return the serviceId
@@ -203,8 +189,8 @@ public class DayStats implements Serializable {
 	 */
 	@Override
 	public String toString() {
-		return "DayStats [id=" + id + ", invokeDate=" + invokeDate + ", appId="
-				+ appId + ", serviceId=" + serviceId + ", methodId=" + methodId
+		return "DayStats [id=" + id + ", invokeDate=" + invokeDate 
+				+  ", serviceId=" + serviceId + ", methodId=" + methodId
 				+ ", successProvider=" + successProvider + ", failureProvider="
 				+ failureProvider + ", elapsedProvider=" + elapsedProvider
 				+ ", successConsumer=" + successConsumer + ", failureConsumer="

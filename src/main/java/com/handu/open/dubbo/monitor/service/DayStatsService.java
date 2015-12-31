@@ -34,29 +34,23 @@ public class DayStatsService {
 	@Autowired
 	DayStatsDAO dayStatsDAO;
 	// 前提条件：单线程程序
-	public void add(String appName, DubboInvoke di) {
-		long appId = configDAO.getAppId(appName);
-		long serviceId = configDAO.getServiceId(appId, di.getService());
+	public void add( DubboInvoke di) {
+		
+		long serviceId = configDAO.getServiceId( di.getService());
 		long methodId = configDAO.getMethodId(serviceId, di.getMethod());
 
-		String key = makeKey(di.getInvokeDate(), appId, serviceId, methodId);
-
-
-		
+		String key = makeKey(di.getInvokeDate(),  serviceId, methodId);		
 		synchronized (map) {
 			DayStats ds = map.get(key);
 			if (ds == null) {
 				ds = new DayStats();
-				ds.setInvokeDate(di.getInvokeDate());
-				ds.setAppId(appId);
+				ds.setInvokeDate(di.getInvokeDate());				
 				ds.setServiceId(serviceId);
 				ds.setMethodId(methodId);
 				map.put(key, ds);
 			}
 			addtoStat(di, ds);
 		}
-		
-		
 	}
 
 	@PostConstruct
@@ -113,11 +107,11 @@ public class DayStatsService {
 
 	}
 
-	private String makeKey(Date invokeDate, long appId, long serviceId,
+	private String makeKey(Date invokeDate, long serviceId,
 			long methodId) {
 
 		StringBuilder buf = new StringBuilder();
-		buf.append(invokeDate.toString()).append(".").append(appId).append(".")
+		buf.append(invokeDate.toString()).append(".")
 				.append(serviceId).append(".").append(methodId);
 
 		return buf.toString();

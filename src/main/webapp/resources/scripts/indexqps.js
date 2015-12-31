@@ -93,7 +93,7 @@ function drawChart(data) {
             }
         }, { // Secondary yAxis
             title: {
-                text: "平均响应时间(ms)",
+                text: "平均响应时间(微妙 us)",
                 style: {
                     color: Highcharts.getOptions().colors[0]
                 }

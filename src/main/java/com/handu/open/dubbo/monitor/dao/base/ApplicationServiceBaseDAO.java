@@ -52,9 +52,9 @@ public class ApplicationServiceBaseDAO extends SqlSessionDaoSupport {
         return list;
     }
     
-    public Long getIdByName(long appId,String str) {
+    public Long getIdByName(String str) {
     	initData();
-        return nameIdMap.get(appId+"."+str);
+        return nameIdMap.get(str);
     }
 
     public ApplicationService getApplicationServiceById(Long id) {
@@ -66,7 +66,7 @@ public class ApplicationServiceBaseDAO extends SqlSessionDaoSupport {
     	if(list==null){
     		list = getSqlSession().selectList("monitor.getAllApplicationService");
     		for(ApplicationService as: list){
-    			nameIdMap.put(as.getAppId()+"."+as.getName(), as.getId());
+    			nameIdMap.put(as.getName(), as.getId());
     			idMaps.put(as.getId(), as);
     		}
     	}

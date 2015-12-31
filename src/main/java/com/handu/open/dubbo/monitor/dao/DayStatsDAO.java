@@ -10,7 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.handu.open.dubbo.monitor.dao.base.ApplicationBaseDAO;
 import com.handu.open.dubbo.monitor.dao.base.ApplicationServiceBaseDAO;
 import com.handu.open.dubbo.monitor.dao.base.ApplicationServiceMethodBaseDAO;
 import com.handu.open.dubbo.monitor.dao.base.DayStatsBaseDAO;
@@ -26,9 +25,6 @@ public class DayStatsDAO {
 
 	@Autowired
 	private DayStatsBaseDAO dayStatsBaseDAO;
-
-	@Autowired
-	ApplicationBaseDAO applicationBaseDAO;
 
 	@Autowired
 	ApplicationServiceBaseDAO applicationServiceBaseDAO;
@@ -52,10 +48,7 @@ public class DayStatsDAO {
 
 		Map<String, List<StatsSum>> map = new HashMap<String, List<StatsSum>>();
 
-		List<StatsSum> slist = getApplicationData(list);
-		map.put("application", slist);
-
-		slist = getServiceData(list);
+		List<StatsSum> slist = getServiceData(list);
 		map.put("service", slist);
 
 		slist = getMethodData(list);
@@ -64,30 +57,7 @@ public class DayStatsDAO {
 		return map;
 	}
 
-	private List<StatsSum> getApplicationData(List<DayStats> list) {
-		Map<Long, StatsSum> map = new HashMap<Long, StatsSum>();
-		StatsSum ss;
-
-		for (DayStats ds : list) {
-			ss = map.get(ds.getAppId());
-			if (ss == null) {
-				ss = new StatsSum();
-				ss.setName(applicationBaseDAO.getNameById(ds.getAppId()));
-				map.put(ds.getAppId(), ss);
-			}
-			ss.setNumProvider(ss.getNumProvider() + ds.getSuccessProvider());
-			ss.setNumConsumer(ss.getNumConsumer() + ds.getSuccessConsumer());
-			ss.setElapsedProvider(ss.getElapsedProvider()
-					+ ds.getElapsedProvider());
-			ss.setElapsedConsumer(ss.getElapsedConsumer()
-					+ ds.getElapsedConsumer());
-		}
-
-		List<StatsSum> slist = new ArrayList<StatsSum>(map.values());
-		Collections.sort(slist);
-		return slist;
-	}
-
+	
 	private List<StatsSum> getServiceData(List<DayStats> list) {
 		Map<Long, StatsSum> map = new HashMap<Long, StatsSum>();
 		StatsSum ss;
@@ -97,8 +67,8 @@ public class DayStatsDAO {
 			if (ss == null) {
 				ss = new StatsSum();
 				ss.setName(applicationServiceBaseDAO.getApplicationServiceById(
-						ds.getAppId()).getName());
-				map.put(ds.getAppId(), ss);
+						ds.getServiceId()).getName());
+				map.put(ds.getServiceId(), ss);
 			}
 			ss.setNumProvider(ss.getNumProvider() + ds.getSuccessProvider());
 			ss.setNumConsumer(ss.getNumConsumer() + ds.getSuccessConsumer());
@@ -120,13 +90,13 @@ public class DayStatsDAO {
 		StatsSum ss;
 
 		for (DayStats ds : list) {
-			ss = map.get(ds.getServiceId());
+			ss = map.get(ds.getMethodId());
 			if (ss == null) {
 				ss = new StatsSum();
 				ss.setName(applicationServiceMethodBaseDAO
 						.getApplicationServiceMethodById(ds.getMethodId())
 						.getName());
-				map.put(ds.getAppId(), ss);
+				map.put(ds.getMethodId(), ss);
 			}
 			ss.setNumProvider(ss.getNumProvider() + ds.getSuccessProvider());
 			ss.setNumConsumer(ss.getNumConsumer() + ds.getSuccessConsumer());
@@ -156,8 +126,7 @@ public class DayStatsDAO {
 			st = map.get(ds.getMethodId());
 			if (st == null) {
 				st = new StatsTable(ds);
-				map.put(ds.getMethodId(), st);
-				st.setAppName(applicationBaseDAO.getNameById(ds.getAppId()));
+				map.put(ds.getMethodId(), st);				
 				st.setServiceName(applicationServiceBaseDAO
 						.getApplicationServiceById(ds.getServiceId()).getName());
 				st.setMethodName(applicationServiceMethodBaseDAO

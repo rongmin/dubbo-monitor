@@ -15,8 +15,7 @@
  */
 package com.handu.open.dubbo.monitor.domain;
 
-
-public class StatsTable implements Comparable<StatsTable>{
+public class StatsTable implements Comparable<StatsTable> {
 
 	/**
 	 * 
@@ -24,7 +23,7 @@ public class StatsTable implements Comparable<StatsTable>{
 	private static final long serialVersionUID = -5468082346847524044L;
 
 	private long methodId;
-	private String appName, serviceName, methodName;
+	private String serviceName, methodName;
 	private int successProvider, failureProvider, elapsedProvider;
 	private int successConsumer, failureConsumer, elapsedConsumer;
 
@@ -34,7 +33,7 @@ public class StatsTable implements Comparable<StatsTable>{
 		this.failureProvider = ds.getFailureProvider();
 		this.failureConsumer = ds.getFailureConsumer();
 		this.elapsedProvider = ds.getElapsedProvider();
-		this.elapsedConsumer =  ds.getElapsedConsumer();
+		this.elapsedConsumer = ds.getElapsedConsumer();
 		this.methodId = ds.getMethodId();
 	}
 
@@ -51,21 +50,6 @@ public class StatsTable implements Comparable<StatsTable>{
 	 */
 	public void setMethodId(long methodId) {
 		this.methodId = methodId;
-	}
-
-	/**
-	 * @return the appName
-	 */
-	public String getAppName() {
-		return appName;
-	}
-
-	/**
-	 * @param appName
-	 *            the appName to set
-	 */
-	public void setAppName(String appName) {
-		this.appName = appName;
 	}
 
 	/**
@@ -194,36 +178,33 @@ public class StatsTable implements Comparable<StatsTable>{
 		this.failureProvider += ds.getFailureProvider();
 		this.failureConsumer += ds.getFailureConsumer();
 		this.elapsedProvider += ds.getElapsedProvider();
-		this.elapsedConsumer +=  ds.getElapsedConsumer();		
+		this.elapsedConsumer += ds.getElapsedConsumer();
 	}
 
-	public long getAverageElapsedProvider(){
+	public long getAverageElapsedProvider() {
 		long t = successProvider + failureProvider;
-		if(t>0)
-			return elapsedProvider*1000/t;
+		if (t > 0)
+			return elapsedProvider * 1000 / t;
 		return 0;
 	}
 
-	public long getAverageElapsedConsumer(){
+	public long getAverageElapsedConsumer() {
 		long t = successConsumer + failureConsumer;
-		if(t>0)
-			return elapsedConsumer*1000/t;
+		if (t > 0)
+			return elapsedConsumer * 1000 / t;
 		return 0;
 	}
-	
-	
+
 	public int compareTo(StatsTable o) {
-		int ok = this.appName.compareTo(o.getAppName());
-		if(ok==0){
-			ok = this.serviceName.compareTo(o.getServiceName());
-			if(ok==0){
-				ok = this.methodName.compareTo(o.getMethodName());
-			}
+		int ok = this.serviceName.compareTo(o.getServiceName());
+		if (ok == 0) {
+			ok = this.methodName.compareTo(o.getMethodName());
 		}
-		if(ok==0){
-			if(this.successProvider > o.getSuccessProvider())				
+
+		if (ok == 0) {
+			if (this.successProvider > o.getSuccessProvider())
 				return 1;
-			if(this.successProvider < o.getSuccessProvider())
+			if (this.successProvider < o.getSuccessProvider())
 				return -1;
 			return 0;
 		}

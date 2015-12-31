@@ -24,8 +24,7 @@ public class ApplicationService implements Serializable {
 	 */
 	private static final long serialVersionUID = -5468082346847524044L;
 
-	private Long id;
-	private Long appId;
+	private Long id;	
     private String name ;
 	/**
 	 * @return the name
@@ -50,19 +49,5 @@ public class ApplicationService implements Serializable {
 	 */
 	public void setId(Long id) {
 		this.id = id;
-	}
-	/**
-	 * @return the appId
-	 */
-	public Long getAppId() {
-		return appId;
-	}
-	/**
-	 * @param appId the appId to set
-	 */
-	public void setAppId(Long appId) {
-		this.appId = appId;
-	}
-
-    
+	}    
 }

@@ -115,6 +115,7 @@ public class DubboMonitorService implements MonitorService {
     SimpleDateFormat ymd = new SimpleDateFormat("yyyyMMdd");
     private void writeToDataBase() throws Exception {
         URL statistics = queue.take();
+        
         if (POISON_PROTOCOL.equals(statistics.getProtocol())) {
             return;
         }
@@ -172,7 +173,7 @@ public class DubboMonitorService implements MonitorService {
     	        	dubboInvokeDAO.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);    	        	
             }            
             
-            dayStats.add(statistics.getParameter(Constants.APPLICATION_KEY),dubboInvoke);
+            dayStats.add(dubboInvoke);
 
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);
