@@ -1,5 +1,6 @@
+drop table if exists    `dubbo_invoke`;
 CREATE TABLE `dubbo_invoke` (
-  `id` varchar(255) NOT NULL DEFAULT '',
+  `id` bigint(20) primary key AUTO_INCREMENT,
   `invoke_date` date NOT NULL,
   `service` varchar(255) DEFAULT NULL,
   `method` varchar(255) DEFAULT NULL,
@@ -13,7 +14,6 @@ CREATE TABLE `dubbo_invoke` (
   `concurrent` int(11) DEFAULT NULL,
   `max_elapsed` int(11) DEFAULT NULL,
   `max_concurrent` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
   KEY `invoke_date` (`invoke_date`),
   KEY `index_service` (`service`) ,
   KEY `index_method` (`method`)

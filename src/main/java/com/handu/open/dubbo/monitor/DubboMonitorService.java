@@ -132,8 +132,7 @@ public class DubboMonitorService implements MonitorService {
         now =  ymd.parse(ymd.format(now));
         
         DubboInvoke dubboInvoke = new DubboInvoke();
-
-        dubboInvoke.setId(UuidUtil.createUUID());
+        
         try {
             if (statistics.hasParameter(PROVIDER)) {
                 dubboInvoke.setType(CONSUMER);

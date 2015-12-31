@@ -20,8 +20,7 @@
         max_concurrent as maxConcurrent
     </sql-->
     
-    <sql id="allNoAsOfDubboInvoke">
-        id,
+    <sql id="allNoAsOfDubboInvoke">        
         invoke_date,
         service,
         method,
@@ -43,8 +42,7 @@
         dubbo_invoke (
         <include refid="allNoAsOfDubboInvoke" />
         )
-        values(
-        #{id},
+        values(        
         #{invokeDate},
         #{service},
         #{method},

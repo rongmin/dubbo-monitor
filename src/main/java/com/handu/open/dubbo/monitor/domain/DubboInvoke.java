@@ -33,7 +33,7 @@ public class DubboInvoke implements Serializable {
 	 */
 	private static final long serialVersionUID = -8434017403698927503L;
 
-	private String id;
+	private long id;
 
     private Date invokeDate;
 
@@ -164,15 +164,23 @@ public class DubboInvoke implements Serializable {
         this.type = type;
     }
 
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
-        this.id = id;
-    }
 
-    public long getTimeParticle() {
+    /**
+	 * @return the id
+	 */
+	public long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public long getTimeParticle() {
         return timeParticle;
     }
 

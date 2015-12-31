@@ -20,6 +20,7 @@ import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.domain.DubboInvokeLineChart;
 import com.handu.open.dubbo.monitor.domain.LineChartSeries;
 import com.handu.open.dubbo.monitor.support.CommonResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -83,12 +84,12 @@ public class ChartsController {
             artLineChartSeries.setName(dubboInvoke.getType());
             qpsSeriesDatas = new ArrayList<double[]>();
             artSeriesDatas = new ArrayList<double[]>();
-            double[] qpsProviderSeriesData;
+            double[] qpsProviderSeriesData =null;
             double[] artProviderSeriesData;
-            for (DubboInvoke dubboInvokeDetail : providerDubboInvokeDetails) {
-                qpsProviderSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", dubboInvokeDetail.getSuccess() / timeParticle))};
-                qpsSeriesDatas.add(qpsProviderSeriesData);
-                artProviderSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", dubboInvokeDetail.getElapsed()))};
+            for (DubboInvoke dubboInvokeDetail : providerDubboInvokeDetails) {                
+				qpsProviderSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", 1.0*dubboInvokeDetail.getSuccess() / timeParticle))};
+				qpsSeriesDatas.add(qpsProviderSeriesData);
+                artProviderSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", 1.0*dubboInvokeDetail.getElapsed()))};
                 artSeriesDatas.add(artProviderSeriesData);
             }
             qpsLineChartSeries.setData(qpsSeriesDatas);
@@ -107,9 +108,9 @@ public class ChartsController {
             double[] qpsConsumerSeriesData;
             double[] artConsumerSeriesData;
             for (DubboInvoke dubboInvokeDetail : consumerDubboInvokeDetails) {
-                qpsConsumerSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", dubboInvokeDetail.getSuccess() / timeParticle))};
+                qpsConsumerSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), 1.0*Double.valueOf(String.format("%.4f", 1.0*dubboInvokeDetail.getSuccess() / timeParticle))};
                 qpsSeriesDatas.add(qpsConsumerSeriesData);
-                artConsumerSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), Double.valueOf(String.format("%.4f", dubboInvokeDetail.getElapsed()))};
+                artConsumerSeriesData = new double[]{dubboInvokeDetail.getInvokeTime(), 1.0*Double.valueOf(String.format("%.4f", 1.0*dubboInvokeDetail.getElapsed()))};
                 artSeriesDatas.add(artConsumerSeriesData);
             }
             qpsLineChartSeries.setData(qpsSeriesDatas);
