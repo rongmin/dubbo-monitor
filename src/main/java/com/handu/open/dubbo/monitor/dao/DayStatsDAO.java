@@ -159,7 +159,7 @@ public class DayStatsDAO {
 				map.put(ds.getMethodId(), st);
 				st.setAppName(applicationBaseDAO.getNameById(ds.getAppId()));
 				st.setServiceName(applicationServiceBaseDAO
-						.getApplicationServiceById(ds.getAppId()).getName());
+						.getApplicationServiceById(ds.getServiceId()).getName());
 				st.setMethodName(applicationServiceMethodBaseDAO
 						.getApplicationServiceMethodById(ds.getMethodId())
 						.getName());

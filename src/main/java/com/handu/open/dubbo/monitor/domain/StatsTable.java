@@ -200,14 +200,14 @@ public class StatsTable implements Comparable<StatsTable>{
 	public long getAverageElapsedProvider(){
 		long t = successProvider + failureProvider;
 		if(t>0)
-			return elapsedProvider/t;
+			return elapsedProvider*1000/t;
 		return 0;
 	}
 
 	public long getAverageElapsedConsumer(){
 		long t = successConsumer + failureConsumer;
 		if(t>0)
-			return elapsedConsumer/t;
+			return elapsedConsumer*1000/t;
 		return 0;
 	}
 	
