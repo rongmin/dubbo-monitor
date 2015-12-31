@@ -72,7 +72,7 @@ public class DayStatsService {
                         logger.error("saveDataToDisk  failed , sleep 10分钟, cause: " + t.getMessage(), t);                        
                     }
                     try {
-                        Thread.sleep(600); 
+                        Thread.sleep(60000); 
                         //Thread.sleep(600000); 
                     } catch (Throwable t2) {
                     }

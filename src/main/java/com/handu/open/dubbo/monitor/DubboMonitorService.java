@@ -168,12 +168,9 @@ public class DubboMonitorService implements MonitorService {
             
             long  totalNum =  dubboInvoke.getSuccess()+ dubboInvoke.getFailure();
             
-            if(dubboInvoke.getFailure() >0 ){
-    	        if( totalNum>0 &&  totalNum*slowElapse < dubboInvoke.getElapsed() )
-    	        	dubboInvokeDAO.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);
-    	        	return;
-            }
-            
+            if(dubboInvoke.getFailure() >0 || (  totalNum>0 &&  totalNum*slowElapse <= dubboInvoke.getElapsed()  )){    	        
+    	        	dubboInvokeDAO.insert(CLASSNAME, "addDubboInvoke", dubboInvoke);    	        	
+            }            
             
             dayStats.add(statistics.getParameter(Constants.APPLICATION_KEY),dubboInvoke);
 

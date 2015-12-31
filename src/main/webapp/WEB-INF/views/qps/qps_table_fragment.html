@@ -1,0 +1,35 @@
+          <table id="tablefragmentTableId" cellspacing="1" class="table table-hover table-striped tablesorter">
+            <thead>
+            <tr>
+              <th>序号</th>
+              <th>App名称</th>
+              <th>Service名称</th>
+              <th>Method</th>
+              <th>successProvider</th>
+              <th>failuerProvider</th>
+              <th>averageTimeProvider</th>
+              <th>successConsumer</th>
+              <th>failuerConsumer</th>
+              <th>averageTimeConsumer</th>              
+            </tr>
+            </thead>
+            <tbody>
+            #for (row : rows)
+            #if (for.index%2==0)
+            <tr class="odd">
+            #else
+            <tr class="even">            
+            #end
+              <td>${for.index}</td>
+              <td>${row.appName}</td>
+              <td>${row.serviceName}</td>
+              <td>${row.methodName}</td>
+              <td>${row.successProvider}</td>
+              <td>${row.failureProvider}</td>
+              <td>${row.averageElapsedProvider}</td>
+              <td>${row.successConsumer}</td>
+              <td>${row.failureConsumer}</td>
+              <td>${row.averageElapsedConsumer}</td>
+            #end
+            </tbody>
+          </table>

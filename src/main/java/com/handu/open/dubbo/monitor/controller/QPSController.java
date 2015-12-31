@@ -21,6 +21,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,10 +31,10 @@ import com.google.common.collect.Lists;
 import com.handu.open.dubbo.monitor.DubboMonitorService;
 import com.handu.open.dubbo.monitor.dao.DayStatsDAO;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
-import com.handu.open.dubbo.monitor.domain.DubboInvokeLineChart;
 import com.handu.open.dubbo.monitor.domain.DubboInvokeLineChartV2;
 import com.handu.open.dubbo.monitor.domain.LineChartSeriesV2;
 import com.handu.open.dubbo.monitor.domain.StatsSum;
+import com.handu.open.dubbo.monitor.domain.StatsTable;
 import com.handu.open.dubbo.monitor.support.CommonResponse;
 
 /**
@@ -68,39 +69,10 @@ public class QPSController {
         CommonResponse commonResponse = CommonResponse.createCommonResponse();
         List<DubboInvokeLineChartV2> dubboInvokeLineChartList = new ArrayList<DubboInvokeLineChartV2>();
         Map<String,List<StatsSum>> map = dayStatsDAO.getDatas(dubboInvoke);
-        List<StatsSum>  applicationList = map.get("application");
         
-        double[] data;
         makeBarLineData(dubboInvokeLineChartList, map.get("application"),"访问次数：application级别统计","application");
         makeBarLineData(dubboInvokeLineChartList, map.get("service"),"访问次数：service(java interface)级别统计","service");
         makeBarLineData(dubboInvokeLineChartList, map.get("method"),"访问次数：method级别统计","method");
-        
-        
-        
-
-       
-        
-       /* Map dubboInvokeMap = dubboMonitorService.countDubboInvokeTopTen(dubboInvoke);
-        
-        DubboInvokeLineChart failureDubboInvokeLineChart = new DubboInvokeLineChart();
-        List<String> fxAxisCategories = Lists.newArrayList();
-        LineChartSeriesV2 flineChartSeries = new LineChartSeriesV2();
-        List<double[]> fdataList = Lists.newArrayList();
-        List<DubboInvoke> failure = (List<DubboInvoke>) dubboInvokeMap.get("failure");
-        for (DubboInvoke di : failure) {
-            fxAxisCategories.add(di.getMethod());
-            data = new double[]{di.getFailure()};
-            fdataList.add(data);
-        }
-        flineChartSeries.setData(fdataList);
-        flineChartSeries.setName("provider");
-
-        failureDubboInvokeLineChart.setxAxisCategories(fxAxisCategories);
-        failureDubboInvokeLineChart.setSeriesData(Arrays.asList(flineChartSeries));
-        failureDubboInvokeLineChart.setChartType("FAILURE");
-        failureDubboInvokeLineChart.setTitle("调用失败的次数最多的30条");
-        failureDubboInvokeLineChart.setyAxisTitle("t");
-        dubboInvokeLineChartList.add(failureDubboInvokeLineChart);*/
 
         commonResponse.setData(dubboInvokeLineChartList);
         return commonResponse;
@@ -173,4 +145,19 @@ public class QPSController {
         successDubboInvokeLineChart.setyAxisTitle("访问次数");
         dubboInvokeLineChartList.add(successDubboInvokeLineChart);
 	}
+	
+	@RequestMapping(value = "table", method = RequestMethod.GET)
+    public String statsTable(@ModelAttribute DubboInvoke dubboInvoke,Model model) {
+		
+
+        return "qps/qps_table";
+    }
+	@RequestMapping(value = "table", method = RequestMethod.POST)
+    public String statsTablePost(@ModelAttribute DubboInvoke dubboInvoke,Model model) {
+		
+		List<StatsTable> stList = dayStatsDAO.getStatsTableList(dubboInvoke);		
+
+        model.addAttribute("rows", stList);
+        return "qps/qps_table_fragment";
+    }
 }
