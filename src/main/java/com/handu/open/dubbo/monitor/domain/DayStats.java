@@ -29,8 +29,11 @@ public class DayStats implements Serializable {
 
 	private Date invokeDate;
 	private long serviceId, methodId;
-	private int successProvider, failureProvider, elapsedProvider;
-	private int successConsumer, failureConsumer, elapsedConsumer;
+	private long successProvider, failureProvider, elapsedProvider;
+	private long successConsumer, failureConsumer, elapsedConsumer;
+
+
+	
 
 
 	/**
@@ -40,13 +43,20 @@ public class DayStats implements Serializable {
 		return id;
 	}
 
+
+
+
+
 	/**
-	 * @param id
-	 *            the id to set
+	 * @param id the id to set
 	 */
 	public void setId(long id) {
 		this.id = id;
 	}
+
+
+
+
 
 	/**
 	 * @return the invokeDate
@@ -55,13 +65,19 @@ public class DayStats implements Serializable {
 		return invokeDate;
 	}
 
+
+
+
+
 	/**
-	 * @param invokeDate
-	 *            the invokeDate to set
+	 * @param invokeDate the invokeDate to set
 	 */
 	public void setInvokeDate(Date invokeDate) {
 		this.invokeDate = invokeDate;
 	}
+
+
+
 
 
 	/**
@@ -71,13 +87,20 @@ public class DayStats implements Serializable {
 		return serviceId;
 	}
 
+
+
+
+
 	/**
-	 * @param serviceId
-	 *            the serviceId to set
+	 * @param serviceId the serviceId to set
 	 */
 	public void setServiceId(long serviceId) {
 		this.serviceId = serviceId;
 	}
+
+
+
+
 
 	/**
 	 * @return the methodId
@@ -86,102 +109,151 @@ public class DayStats implements Serializable {
 		return methodId;
 	}
 
+
+
+
+
 	/**
-	 * @param methodId
-	 *            the methodId to set
+	 * @param methodId the methodId to set
 	 */
 	public void setMethodId(long methodId) {
 		this.methodId = methodId;
 	}
 
+
+
+
+
 	/**
 	 * @return the successProvider
 	 */
-	public int getSuccessProvider() {
+	public long getSuccessProvider() {
 		return successProvider;
 	}
 
+
+
+
+
 	/**
-	 * @param successProvider
-	 *            the successProvider to set
+	 * @param successProvider the successProvider to set
 	 */
-	public void setSuccessProvider(int successProvider) {
+	public void setSuccessProvider(long successProvider) {
 		this.successProvider = successProvider;
 	}
+
+
+
+
 
 	/**
 	 * @return the failureProvider
 	 */
-	public int getFailureProvider() {
+	public long getFailureProvider() {
 		return failureProvider;
 	}
 
+
+
+
+
 	/**
-	 * @param failureProvider
-	 *            the failureProvider to set
+	 * @param failureProvider the failureProvider to set
 	 */
-	public void setFailureProvider(int failureProvider) {
+	public void setFailureProvider(long failureProvider) {
 		this.failureProvider = failureProvider;
-	}	
-	
+	}
+
+
+
+
+
 	/**
 	 * @return the elapsedProvider
 	 */
-	public int getElapsedProvider() {
+	public long getElapsedProvider() {
 		return elapsedProvider;
 	}
+
+
+
+
 
 	/**
 	 * @param elapsedProvider the elapsedProvider to set
 	 */
-	public void setElapsedProvider(int elapsedProvider) {
+	public void setElapsedProvider(long elapsedProvider) {
 		this.elapsedProvider = elapsedProvider;
 	}
+
+
+
+
 
 	/**
 	 * @return the successConsumer
 	 */
-	public int getSuccessConsumer() {
+	public long getSuccessConsumer() {
 		return successConsumer;
 	}
 
+
+
+
+
 	/**
-	 * @param successConsumer
-	 *            the successConsumer to set
+	 * @param successConsumer the successConsumer to set
 	 */
-	public void setSuccessConsumer(int successConsumer) {
+	public void setSuccessConsumer(long successConsumer) {
 		this.successConsumer = successConsumer;
 	}
+
+
+
+
 
 	/**
 	 * @return the failureConsumer
 	 */
-	public int getFailureConsumer() {
+	public long getFailureConsumer() {
 		return failureConsumer;
 	}
 
+
+
+
+
 	/**
-	 * @param failureConsumer
-	 *            the failureConsumer to set
+	 * @param failureConsumer the failureConsumer to set
 	 */
-	public void setFailureConsumer(int failureConsumer) {
+	public void setFailureConsumer(long failureConsumer) {
 		this.failureConsumer = failureConsumer;
 	}
+
+
+
+
 
 	/**
 	 * @return the elapsedConsumer
 	 */
-	public int getElapsedConsumer() {
+	public long getElapsedConsumer() {
 		return elapsedConsumer;
 	}
 
+
+
+
+
 	/**
-	 * @param elapsedConsumer
-	 *            the elapsedConsumer to set
+	 * @param elapsedConsumer the elapsedConsumer to set
 	 */
-	public void setElapsedConsumer(int elapsedConsumer) {
+	public void setElapsedConsumer(long elapsedConsumer) {
 		this.elapsedConsumer = elapsedConsumer;
 	}
+
+
+
 
 
 	/* (non-Javadoc)

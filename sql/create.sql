@@ -26,15 +26,14 @@ CREATE TABLE `day_stats` (
   `invoke_date` date NOT NULL,
   `service_id` bigint(20) NOT NULL,  
   `method_id` bigint(20) NOT NULL,  
-  `success_provider` int(11) NOT NULL,
-  `failure_provider` int(11) NOT NULL,
-  `elapsed_provider` int(11) NOT NULL,
-  `success_consumer` int(11) NOT NULL,
-  `failure_consumer` int(11) NOT NULL,
-  `elapsed_consumer` int(11) NOT NULL,
+  `success_provider` bigint(20) NOT NULL,
+  `failure_provider` bigint(20) NOT NULL,
+  `elapsed_provider` bigint(20) NOT NULL,
+  `success_consumer` bigint(20) NOT NULL,
+  `failure_consumer` bigint(20) NOT NULL,
+  `elapsed_consumer` bigint(20) NOT NULL,
   UNIQUE KEY `invoke_date_method` (`invoke_date`, `method_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
-
 
 
 drop table if exists    `application_service`;
@@ -53,3 +52,4 @@ CREATE TABLE `application_service_method` (
   `maxtime_consumer` int(11) NOT NULL DEFAULT 150,
   unique key method_name (service_id,name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+========================
