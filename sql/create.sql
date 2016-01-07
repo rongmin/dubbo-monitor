@@ -19,6 +19,22 @@ CREATE TABLE `dubbo_invoke` (
   KEY `index_method` (`method`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
+DROP TABLE IF EXISTS `zabbix_invoke`;
+CREATE TABLE `zabbix_invoke` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `service` varchar(255) NOT NULL DEFAULT '',
+  `method` varchar(255) NOT NULL DEFAULT '',
+  `provider` varchar(255) NOT NULL DEFAULT '',
+  `invoke_time` bigint(20) DEFAULT NULL,
+  `success` int(11) DEFAULT NULL,
+  `failure` int(11) DEFAULT NULL,
+  `elapsed` int(11) DEFAULT NULL,
+  `concurrent` int(11) DEFAULT NULL,
+  `max_elapsed` int(11) DEFAULT NULL,
+  `max_concurrent` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `IDX_SERVICE_METHOD_PROVIDER` (`service`,`method`,`provider`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
   
 drop table if exists    `day_stats`;
 CREATE TABLE `day_stats` (

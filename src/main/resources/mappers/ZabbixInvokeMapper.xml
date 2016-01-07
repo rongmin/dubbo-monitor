@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.service.ZabbixMonitorService">
+    
+    <sql id="zabbixInvokeObj">
+		id,
+		service,
+		method,
+		provider,
+		invoke_time as invokeTime,
+		success,
+		failure,
+		elapsed,
+		concurrent,
+		max_elapsed as maxElapsed,
+		max_concurrent as maxConcurrent
+	</sql>
+    <sql id="zabbixInvokeColumn">        
+        service,
+        method,
+        provider,
+        invoke_time,
+        success,
+        failure,
+        elapsed,
+        concurrent,
+        max_elapsed,
+        max_concurrent
+    </sql>
+
+    <!-- Add -->
+    <insert id="addZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+        insert into zabbix_invoke (<include refid="zabbixInvokeColumn" />)
+        values(        
+        #{service},
+        #{method},
+        #{provider},
+        #{invokeTime},
+        #{success},
+        #{failure},
+        #{elapsed},
+        #{concurrent},
+        #{maxElapsed},
+        #{maxConcurrent}
+        )
+    </insert>
+    
+    <update id="updateZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+		update zabbix_invoke 
+		set	
+		invoke_time = #{invokeTime},
+		success = #{success},
+		failure = #{failure},
+		elapsed = #{elapsed},
+		concurrent = #{concurrent},
+		max_elapsed = #{maxElapsed},
+		max_concurrent = #{maxConcurrent}
+		where id = #{id}
+	</update>
+
+    <select id="getZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke" resultType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+        SELECT <include refid="zabbixInvokeObj" /> FROM zabbix_invoke
+        where service = #{service} AND method = #{method} AND provider = #{provider}
+    </select>
+    
+</mapper>
