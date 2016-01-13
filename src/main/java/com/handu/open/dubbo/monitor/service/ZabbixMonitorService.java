@@ -3,16 +3,17 @@ package com.handu.open.dubbo.monitor.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-import com.alibaba.dubbo.config.annotation.Service;
 import com.handu.open.dubbo.monitor.dao.base.DubboInvokeBaseDAO;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.domain.ZabbixInvoke;
 
-@Service
+@Component
 public class ZabbixMonitorService {
 
 	public static final String CLASSNAME = ZabbixMonitorService.class.getName() + ".";
+	
 	@Autowired
 	private DubboInvokeBaseDAO dubboInvokeDAO;
 

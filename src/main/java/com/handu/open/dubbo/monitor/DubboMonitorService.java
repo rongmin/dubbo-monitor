@@ -73,8 +73,9 @@ public class DubboMonitorService implements MonitorService {
     
     @Autowired
     DayStatsService dayStats;
+    
     @Autowired
-    private ZabbixMonitorService zabbixService;
+    ZabbixMonitorService zabbixService;
 
     @Autowired
     Environment env;
