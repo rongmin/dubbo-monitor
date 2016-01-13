@@ -72,10 +72,10 @@ public class DubboMonitorService implements MonitorService {
     private DubboInvokeBaseDAO dubboInvokeDAO;
     
     @Autowired
-    DayStatsService dayStats;
+    private DayStatsService dayStats;
     
     @Autowired
-    ZabbixMonitorService zabbixService;
+    private ZabbixMonitorService zabbixService;
 
     @Autowired
     Environment env;
