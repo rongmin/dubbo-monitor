@@ -36,6 +36,7 @@ import com.alibaba.dubbo.common.URL;
 import com.alibaba.dubbo.common.utils.ConcurrentHashSet;
 import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.dubbo.monitor.MonitorService;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.RegistryService;
 import com.handu.open.dubbo.monitor.dao.ConfigDAO;
@@ -265,18 +266,19 @@ public class RegistryContainer {
 					logger.warn("notify url: " + url);
 					String application = url
 							.getParameter(Constants.APPLICATION_KEY);
-					if (application != null && application.length() > 0) {
-						applications.add(application);
-						notifyApps.add(application);
-					}
 					String service = url.getServiceInterface();
-					services.add(service);
 					String category = url.getParameter(Constants.CATEGORY_KEY,
 							Constants.DEFAULT_CATEGORY);
 					if (Constants.PROVIDERS_CATEGORY.equals(category)) {
 						if (Constants.EMPTY_PROTOCOL.equals(url.getProtocol())) {
 							serviceProviders.remove(service);
 						} else {
+							if (application != null && application.length() > 0) {
+								applications.add(application);
+								notifyApps.add(application);
+							}
+							services.add(service);
+							initService(service,url);
 							List<URL> list = proivderMap.get(service);
 							if (list == null) {
 								list = new ArrayList<URL>();
@@ -305,12 +307,17 @@ public class RegistryContainer {
 								}
 								applicationServices.add(service);
 							}
-							initService(service,url);
 						}
 					} else if (Constants.CONSUMERS_CATEGORY.equals(category)) {
 						if (Constants.EMPTY_PROTOCOL.equals(url.getProtocol())) {
 							serviceConsumers.remove(service);
 						} else {
+							if (application != null && application.length() > 0) {
+								applications.add(application);
+								notifyApps.add(application);
+							}
+							services.add(service);
+							initService(service,url);
 							List<URL> list = consumerMap.get(service);
 							if (list == null) {
 								list = new ArrayList<URL>();
@@ -339,7 +346,6 @@ public class RegistryContainer {
 								}
 								applicationServices.add(service);
 							}
-							initService(service,url);
 						}
 					}
 				}
@@ -361,7 +367,15 @@ public class RegistryContainer {
 		if (service == null || service.isEmpty()) {
 			return;
 		}
-		configDAO.getServiceId(service);
+		long serviceId = configDAO.getServiceId(service);
+		String method = url.getParameter(MonitorService.METHOD);
+		if (method == null || method.length() == 0) {
+			return;
+		}
+		String[] methodArray = method.split(",");
+		for (String m : methodArray) {
+			configDAO.getMethodId(serviceId, m);
+		}
 	}
 	
 	/**
