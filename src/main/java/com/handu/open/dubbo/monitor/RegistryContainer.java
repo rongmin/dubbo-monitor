@@ -392,7 +392,7 @@ public class RegistryContainer {
 				AppAlarm alarm = new AppAlarm();
 				alarm.setAppId(existObj.getId());
 				alarm.setProviderNum(existObj.getProviderNum());
-				alarm.setRegisterNum(regItem.getProviderNum());
+				alarm.setRegisterCount(regItem.getProviderNum());
 				alarm.setInvokeTime(System.currentTimeMillis());
 				appAlarmService.add(alarm);
 			}

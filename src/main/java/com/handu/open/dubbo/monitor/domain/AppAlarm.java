@@ -14,7 +14,7 @@ public class AppAlarm implements Serializable {
 	private Long id;
 	private Long appId;
 	private Integer providerNum;
-	private Integer registerNum;
+	private Integer registerCount;
 	private Long invokeTime;
 
 	public Long getId() {
@@ -41,12 +41,12 @@ public class AppAlarm implements Serializable {
 		this.providerNum = providerNum;
 	}
 
-	public Integer getRegisterNum() {
-		return registerNum;
+	public Integer getRegisterCount() {
+		return registerCount;
 	}
 
-	public void setRegisterNum(Integer registerNum) {
-		this.registerNum = registerNum;
+	public void setRegisterCount(Integer registerCount) {
+		this.registerCount = registerCount;
 	}
 
 	public Long getInvokeTime() {

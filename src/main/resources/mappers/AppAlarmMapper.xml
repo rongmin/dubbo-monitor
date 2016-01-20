@@ -7,13 +7,13 @@
 		id,
 		app_id as appId,
 		provider_num as providerNum,
-		register_num as registerNum,
+		register_count as registerCount,
 		invoke_time as invokeTime
 	</sql>
     <sql id="entityColumn">        
         app_id,
 		provider_num,
-		register_num,
+		register_count,
 		invoke_time
     </sql>
 
@@ -23,7 +23,7 @@
         VALUES(        
         #{appId},
         #{providerNum},
-        #{registerNum},
+        #{registerCount},
         #{invokeTime}
         )
     </insert>
@@ -32,7 +32,7 @@
 		UPDATE app_alarm SET	
 		app_id = #{appId},
 		provider_num = #{providerNum},
-		register_num = #{registerNum},
+		register_count = #{registerCount},
 		invoke_time = #{invokeTime}
 		WHERE id = #{id}
 	</update>

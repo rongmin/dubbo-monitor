@@ -106,7 +106,7 @@ CREATE TABLE `app_alarm` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `app_id` bigint(20) NOT NULL,
   `provider_num` int(11) NOT NULL,
-  `register_num` int(11) NOT NULL,
+  `register_count` int(11) NOT NULL,
   `invoke_time` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
