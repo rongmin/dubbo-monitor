@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.service.DubboDelayService">
+
+	<sql id="entityObj">
+		id,
+		invoke_date as invokeDate,
+		service,
+		method,
+		consumer,
+		provider,
+		type,
+		invoke_time as invokeTime,
+		success,
+		failure,
+		elapsed,
+		concurrent,
+		max_elapsed as maxElapsed,
+		max_concurrent as maxConcurrent
+	</sql>
+	<sql id="entityColumn">
+		invoke_date,
+		service,
+		method,
+		consumer,
+		provider,
+		type,
+		invoke_time,
+		success,
+		failure,
+		elapsed,
+		concurrent,
+		max_elapsed,
+		max_concurrent
+	</sql>
+
+	<!-- Add -->
+	<insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+		INSERT INTO dubbo_delay (
+		<include refid="entityColumn" />
+		)
+		VALUES(
+		#{invokeDate},
+		#{service},
+		#{method},
+		#{consumer},
+		#{provider},
+		#{type},
+		#{invokeTime},
+		#{success},
+		#{failure},
+		#{elapsed},
+		#{concurrent},
+		#{maxElapsed},
+		#{maxConcurrent}
+		)
+	</insert>
+
+	<update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+		UPDATE dubbo_delay SET
+		invoke_date = #{invokeDate},
+		service = #{service},
+		method = #{method},
+		consumer = #{consumer},
+		provider = #{provider},
+		type = #{type},
+		invoke_time = #{invokeTime},
+		success = #{success},
+		failure = #{failure},
+		elapsed = #{elapsed},
+		concurrent = #{concurrent},
+		max_elapsed = #{maxElapsed},
+		max_concurrent = #{maxConcurrent}
+		WHERE id = #{id}
+	</update>
+
+	<delete id="deleteEntity" parameterType="java.lang.Long">
+		DELETE FROM dubbo_delay
+		WHERE id = #{id}
+	</delete>
+
+	<select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke"
+		resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+		SELECT
+		<include refid="entityObj" />
+		FROM dubbo_delay
+		<where>
+			1=1
+			<if test="invokeDate != null">
+				AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+			</if>
+			<if test="invokeDateFrom != null">
+				<![CDATA[AND invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+			</if>
+			<if test="invokeDateTo != null">
+				<![CDATA[AND invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+			</if>
+			<if test="service != null and service!= '' ">
+				AND service = #{service}
+			</if>
+			<if test="method != null and method!= '' ">
+				AND method = #{method}
+			</if>
+			<if test="consumer != null and consumer!= '' ">
+				AND consumer = #{consumer}
+			</if>
+			<if test="provider != null and provider!= '' ">
+				AND provider = #{provider}
+			</if>
+			<if test="type != null and type!= '' ">
+				AND type = #{type}
+			</if>
+		</where>
+	</select>
+</mapper>

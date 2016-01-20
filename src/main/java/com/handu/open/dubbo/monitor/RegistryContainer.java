@@ -27,6 +27,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.dubbo.common.Constants;
@@ -36,6 +38,11 @@ import com.alibaba.dubbo.common.utils.NetUtils;
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.alibaba.dubbo.registry.NotifyListener;
 import com.alibaba.dubbo.registry.RegistryService;
+import com.handu.open.dubbo.monitor.dao.ConfigDAO;
+import com.handu.open.dubbo.monitor.domain.AppAlarm;
+import com.handu.open.dubbo.monitor.domain.AppItem;
+import com.handu.open.dubbo.monitor.service.AppAlarmService;
+import com.handu.open.dubbo.monitor.service.AppItemService;
 
 /**
  * RegistryContainer
@@ -44,6 +51,7 @@ import com.alibaba.dubbo.registry.RegistryService;
  */
 @Service
 public class RegistryContainer {
+	private static Logger logger = Logger.getLogger(RegistryContainer.class);
 
 	public static final String REGISTRY_ADDRESS = "dubbo.registry.address";
 
@@ -65,6 +73,12 @@ public class RegistryContainer {
 
 	@Reference
 	private RegistryService registry;
+	@Autowired
+	private AppItemService appItemService;
+	@Autowired
+	private AppAlarmService appAlarmService;
+	@Autowired
+	private ConfigDAO configDAO;
 
 	public RegistryService getRegistry() {
 		return registry;
@@ -145,6 +159,35 @@ public class RegistryContainer {
 		}
 		return urls;
 	}
+	
+	public AppItem getHostsByApplication(String application) {
+		AppItem item = new AppItem();
+		Set<String> addresses = new HashSet<String>();
+		if (application != null && application.length() > 0) {
+			for (List<URL> providers : serviceProviders.values()) {
+				for (URL url : providers) {
+					if (application.equals(url.getParameter(Constants.APPLICATION_KEY))) {
+						addresses.add(url.getHost());
+						if (item.getOwner() == null) {
+							item.setOwner(url.getParameter("owner", "") + (url.hasParameter("organization")
+									? " (" + url.getParameter("organization") + ")" : ""));
+						}
+					}
+				}
+			}
+		}
+		item.setProviderNum(addresses.size());
+		StringBuilder buffer = new StringBuilder();
+		for (String add : addresses) {
+			buffer.append(add);
+			buffer.append(",");
+		}
+		if (buffer.length() > 0) {
+			buffer.deleteCharAt(buffer.length() - 1);
+		}
+		item.setProvider(buffer.toString());
+		return item;
+	}
 
 	public Set<String> getHosts() {
 		Set<String> addresses = new HashSet<String>();
@@ -217,11 +260,14 @@ public class RegistryContainer {
 				}
 				Map<String, List<URL>> proivderMap = new HashMap<String, List<URL>>();
 				Map<String, List<URL>> consumerMap = new HashMap<String, List<URL>>();
+				Set<String> notifyApps = new HashSet<String>();
 				for (URL url : urls) {
+					logger.warn("notify url: " + url);
 					String application = url
 							.getParameter(Constants.APPLICATION_KEY);
 					if (application != null && application.length() > 0) {
 						applications.add(application);
+						notifyApps.add(application);
 					}
 					String service = url.getServiceInterface();
 					services.add(service);
@@ -259,6 +305,7 @@ public class RegistryContainer {
 								}
 								applicationServices.add(service);
 							}
+							initService(service,url);
 						}
 					} else if (Constants.CONSUMERS_CATEGORY.equals(category)) {
 						if (Constants.EMPTY_PROTOCOL.equals(url.getProtocol())) {
@@ -292,12 +339,15 @@ public class RegistryContainer {
 								}
 								applicationServices.add(service);
 							}
-
+							initService(service,url);
 						}
 					}
 				}
 				if (proivderMap != null && proivderMap.size() > 0) {
 					serviceProviders.putAll(proivderMap);
+					if(notifyApps.size()>0){
+						appProviderChangeHandle(notifyApps);
+					}					
 				}
 				if (consumerMap != null && consumerMap.size() > 0) {
 					serviceConsumers.putAll(consumerMap);
@@ -305,6 +355,48 @@ public class RegistryContainer {
 			}
 		});
 
+	}
+
+	private void initService(String service, URL url) {
+		if (service == null || service.isEmpty()) {
+			return;
+		}
+		configDAO.getServiceId(service);
+	}
+	
+	/**
+	 * handle application provider count change.
+	 * @param application
+	 * @param url
+	 */
+	private void appProviderChangeHandle(Set<String> notifyApps) {
+		if (notifyApps == null || notifyApps.isEmpty()) {
+			return;
+		}
+		for (String application : notifyApps) {
+			AppItem regItem = getHostsByApplication(application);
+			AppItem existObj = appItemService.getByName(application);
+			if (existObj == null) {
+				AppItem item = new AppItem();
+				item.setName(application);
+				item.setProviderNum(regItem.getProviderNum() == 0 ? 1 : regItem.getProviderNum());
+				item.setOwner(regItem.getOwner());
+				item.setProvider(regItem.getProvider());
+				appItemService.add(item);// id will load
+				existObj = item;
+			}
+			if (existObj.getProviderNum() == regItem.getProviderNum()) {
+				continue;
+			}
+			if (existObj.getProviderNum() > regItem.getProviderNum()) {
+				AppAlarm alarm = new AppAlarm();
+				alarm.setAppId(existObj.getId());
+				alarm.setProviderNum(existObj.getProviderNum());
+				alarm.setRegisterNum(regItem.getProviderNum());
+				alarm.setInvokeTime(System.currentTimeMillis());
+				appAlarmService.add(alarm);
+			}
+		}
 	}
 
 	@PreDestroy

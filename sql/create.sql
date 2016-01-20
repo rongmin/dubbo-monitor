@@ -68,4 +68,46 @@ CREATE TABLE `application_service_method` (
   `maxtime_consumer` int(11) NOT NULL DEFAULT 150,
   unique key method_name (service_id,name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+
+drop table if exists    `dubbo_delay`;
+CREATE TABLE `dubbo_delay` (
+  `id` bigint(20) primary key AUTO_INCREMENT,
+  `invoke_date` date NOT NULL,
+  `service` varchar(255) DEFAULT NULL,
+  `method` varchar(255) DEFAULT NULL,
+  `consumer` varchar(255) DEFAULT NULL,
+  `provider` varchar(255) DEFAULT NULL,
+  `type` varchar(255) DEFAULT '',
+  `invoke_time` bigint(20) DEFAULT NULL,
+  `success` int(11) DEFAULT NULL,
+  `failure` int(11) DEFAULT NULL,
+  `elapsed` int(11) DEFAULT NULL,
+  `concurrent` int(11) DEFAULT NULL,
+  `max_elapsed` int(11) DEFAULT NULL,
+  `max_concurrent` int(11) DEFAULT NULL,
+  KEY `invoke_date` (`invoke_date`),
+  KEY `index_service` (`service`) ,
+  KEY `index_method` (`method`)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
+
+DROP TABLE IF EXISTS `app_item`;
+CREATE TABLE `app_item` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `provider_num` int(11) NOT NULL,
+  `owner` varchar(255) DEFAULT '',
+  `provider` varchar(255) DEFAULT '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `application_item_name` (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `app_alarm`;
+CREATE TABLE `app_alarm` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `app_id` bigint(20) NOT NULL,
+  `provider_num` int(11) NOT NULL,
+  `register_num` int(11) NOT NULL,
+  `invoke_time` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ========================

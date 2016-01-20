@@ -25,15 +25,15 @@ import org.mybatis.spring.support.SqlSessionDaoSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.handu.open.dubbo.monitor.domain.ApplicationService;
 import com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod;
+import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 
 @Repository
 public class ApplicationServiceMethodBaseDAO extends SqlSessionDaoSupport {
 
 	private List<ApplicationServiceMethod> list;
 	private Map<String, Long> nameIdMap = new HashMap<String, Long>();
-	private Map<Long,ApplicationServiceMethod>  idMaps  = new HashMap<Long,ApplicationServiceMethod>();
+	private Map<Long, ApplicationServiceMethod> idMaps = new HashMap<Long, ApplicationServiceMethod>();
 
 	@Autowired
 	public void setSqlSessionFactory(SqlSessionFactory sqlSessionFactory) {
@@ -57,20 +57,22 @@ public class ApplicationServiceMethodBaseDAO extends SqlSessionDaoSupport {
 		return nameIdMap.get(serviceId + "." + str);
 	}
 
-    public ApplicationServiceMethod getApplicationServiceMethodById(Long id) {
-    	initData();
-        return idMaps.get(id);
-    }
-	
-	private void initData(){
+	public ApplicationServiceMethod getApplicationServiceMethodById(Long id) {
+		initData();
+		return idMaps.get(id);
+	}
+
+	private void initData() {
 		if (list == null) {
-			list = getSqlSession().selectList(
-					"monitor.getAllApplicationServiceMethod");
+			list = getSqlSession().selectList("monitor.getAllApplicationServiceMethod");
 			for (ApplicationServiceMethod asm : list) {
-				nameIdMap.put(asm.getServiceId() + "." + asm.getName(),
-						asm.getId());
+				nameIdMap.put(asm.getServiceId() + "." + asm.getName(), asm.getId());
 				idMaps.put(asm.getId(), asm);
 			}
-		}		
+		}
+	}
+
+	public ApplicationServiceMethod getByServiceAndMethod(DubboInvoke param) {
+		return getSqlSession().selectOne("monitor.findApplicationServiceMethod", param);
 	}
 }

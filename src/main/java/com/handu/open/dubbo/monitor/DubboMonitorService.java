@@ -38,6 +38,7 @@ import com.google.common.collect.Maps;
 import com.handu.open.dubbo.monitor.dao.base.DubboInvokeBaseDAO;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.service.DayStatsService;
+import com.handu.open.dubbo.monitor.service.DubboDelayService;
 import com.handu.open.dubbo.monitor.service.ZabbixMonitorService;
 
 /**
@@ -66,9 +67,6 @@ public class DubboMonitorService implements MonitorService {
     private BlockingQueue<URL> queue;
 
     @Autowired
-    private RegistryContainer registryContainer;
-
-    @Autowired
     private DubboInvokeBaseDAO dubboInvokeDAO;
     
     @Autowired
@@ -76,6 +74,9 @@ public class DubboMonitorService implements MonitorService {
     
     @Autowired
     private ZabbixMonitorService zabbixService;
+   
+    @Autowired
+    private DubboDelayService dubboDelayService;
 
     @Autowired
     Environment env;
@@ -177,6 +178,7 @@ public class DubboMonitorService implements MonitorService {
             
             dayStats.add(dubboInvoke);
             zabbixService.saveOrUpdate(dubboInvoke);
+            dubboDelayService.add(dubboInvoke);
 
         } catch (Throwable t) {
             logger.error(t.getMessage(), t);

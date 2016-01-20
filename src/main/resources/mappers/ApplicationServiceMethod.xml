@@ -20,4 +20,23 @@
         maxtime_consumer as maxtimeConsumer
          FROM application_service_method
     </select>
+    
+    <select id="findApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+    	SELECT 
+    	a.id,
+    	a.service_id as serviceId,
+    	a.name,
+    	a.maxtime_provider as maxtimeProvider,
+    	a.maxtime_consumer as maxtimeConsumer
+    	FROM application_service_method as a JOIN application_service as b ON a.service_id = b.id 
+    	WHERE 
+    	1=1
+    	<if test="service != null and service != ''">
+			AND b.name=#{service}
+		</if>
+		<if test="method != null and method != ''">
+			AND a.name=#{method}
+		</if>
+    
+    </select>
 </mapper>

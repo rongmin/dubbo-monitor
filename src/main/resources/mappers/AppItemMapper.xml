@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.service.AppItemService">
+    
+    <sql id="entityObj">
+		id,
+		name,
+		provider_num as providerNum,
+		owner,
+		provider
+	</sql>
+    <sql id="entityColumn">        
+        name,
+		provider_num,
+		owner,
+		provider
+    </sql>
+
+    <!-- Add -->
+    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem">
+        INSERT INTO app_item (<include refid="entityColumn" />)
+        VALUES(        
+        #{name},
+        #{providerNum},
+        #{owner},
+        #{provider}
+        )
+        <selectKey keyProperty="id" resultType="java.lang.Long">
+	    	SELECT LAST_INSERT_ID()
+	    </selectKey>
+    </insert>
+    
+    <update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem">
+		UPDATE app_item SET	
+		name = #{name},
+		provider_num = #{providerNum},
+		owner = #{owner},
+		provider = #{provider}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteEntity" parameterType="java.lang.Long">
+		DELETE FROM app_item WHERE id = #{id}
+	</delete>
+
+    <select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem" resultType="com.handu.open.dubbo.monitor.domain.AppItem">
+        SELECT <include refid="entityObj" /> FROM app_item
+        <where>
+			1=1
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="owner != null and owner != ''">
+				AND owner = #{owner}
+			</if>
+			<if test="provider != null and provider != ''">
+				AND provider = #{provider}
+			</if>
+		</where>
+    </select>
+    
+</mapper>

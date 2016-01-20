@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.service.AppAlarmService">
+    
+    <sql id="entityObj">
+		id,
+		app_id as appId,
+		provider_num as providerNum,
+		register_num as registerNum,
+		invoke_time as invokeTime
+	</sql>
+    <sql id="entityColumn">        
+        app_id,
+		provider_num,
+		register_num,
+		invoke_time
+    </sql>
+
+    <!-- Add -->
+    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+        INSERT INTO app_alarm (<include refid="entityColumn" />)
+        VALUES(        
+        #{appId},
+        #{providerNum},
+        #{registerNum},
+        #{invokeTime}
+        )
+    </insert>
+    
+    <update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+		UPDATE app_alarm SET	
+		app_id = #{appId},
+		provider_num = #{providerNum},
+		register_num = #{registerNum},
+		invoke_time = #{invokeTime}
+		WHERE id = #{id}
+	</update>
+	
+	<delete id="deleteEntity" parameterType="java.lang.Long">
+		DELETE FROM app_alarm WHERE id = #{id}
+	</delete>
+
+    <select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm" resultType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+        SELECT <include refid="entityObj" />
+        FROM app_alarm
+        <where>
+			1=1
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="appId != null and appId != ''">
+				AND app_id = #{appId}
+			</if>
+			<if test="invokeTime != null and invokeTime != ''">
+				AND invoke_time = #{invokeTime}
+			</if>
+		</where>
+    </select>
+    
+</mapper>
