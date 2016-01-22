@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,17 @@ public class AppAlarmService {
 
 	public List<AppAlarm> list() {
 		List<AppAlarm> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity");
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 
 	public List<AppAlarm> list(AppAlarm param) {
 		List<AppAlarm> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 

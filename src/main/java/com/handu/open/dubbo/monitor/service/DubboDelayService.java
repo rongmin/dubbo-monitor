@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -10,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.alibaba.dubbo.monitor.MonitorService;
-import com.handu.open.dubbo.monitor.DubboMonitorService;
 import com.handu.open.dubbo.monitor.dao.base.ApplicationServiceMethodBaseDAO;
 import com.handu.open.dubbo.monitor.dao.base.DubboInvokeBaseDAO;
 import com.handu.open.dubbo.monitor.domain.ApplicationService;
@@ -69,11 +69,18 @@ public class DubboDelayService {
 
 	public List<ApplicationService> listLowServices(DubboDelay param) {
 		List<ApplicationService> list = dubboInvokeDAO.getList(CLASSNAME, "findLowServices", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 
 	public List<ApplicationServiceMethod> getMethodsByService(DubboDelay param) {
-		return dubboInvokeDAO.getList(CLASSNAME, "getMethodsByService", param);
+		List<ApplicationServiceMethod> list = dubboInvokeDAO.getList(CLASSNAME, "getMethodsByService", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
+		return list;
 	}
 
 	/**
@@ -87,7 +94,11 @@ public class DubboDelayService {
 			logger.error("统计查询缺少必要参数！");
 			throw new RuntimeException("统计查询缺少必要参数！");
 		}
-		return dubboInvokeDAO.getList(CLASSNAME, "countDubboDelayInfo", param);
+		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "countDubboDelayInfo", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
+		return list;
 	}
 
 	/**
@@ -100,16 +111,26 @@ public class DubboDelayService {
 			logger.error("统计查询缺少必要参数！");
 			throw new RuntimeException("统计查询缺少必要参数！");
 		}
-		return dubboInvokeDAO.getList(CLASSNAME, "countDubboDelay", param);
+		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "countDubboDelay", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
+		return list;
 	}
 
 	public List<DubboDelay> list() {
 		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity");
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 
 	public List<DubboDelay> list(DubboDelay param) {
 		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 
