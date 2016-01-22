@@ -6,23 +6,23 @@
 	<sql id="entityObj">
 		id,
 		invoke_date as invokeDate,
-		service,
-		method,
+		service_id as serviceId,
+		method_id as methodId,
 		consumer,
 		provider,
 		type,
-		invoke_time as invokeTime,
+		invoke_time as	invokeTime,
 		success,
 		failure,
 		elapsed,
 		concurrent,
-		max_elapsed as maxElapsed,
+		max_elapsed as	maxElapsed,
 		max_concurrent as maxConcurrent
 	</sql>
 	<sql id="entityColumn">
 		invoke_date,
-		service,
-		method,
+		service_id,
+		method_id,
 		consumer,
 		provider,
 		type,
@@ -36,14 +36,14 @@
 	</sql>
 
 	<!-- Add -->
-	<insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+	<insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay">
 		INSERT INTO dubbo_delay (
 		<include refid="entityColumn" />
 		)
 		VALUES(
 		#{invokeDate},
-		#{service},
-		#{method},
+		#{serviceId},
+		#{methodId},
 		#{consumer},
 		#{provider},
 		#{type},
@@ -57,14 +57,14 @@
 		)
 	</insert>
 
-	<update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+	<update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay">
 		UPDATE dubbo_delay SET
 		invoke_date = #{invokeDate},
-		service = #{service},
-		method = #{method},
+		service_id = #{serviceId},
+		method_id =	#{methodId},
 		consumer = #{consumer},
 		provider = #{provider},
-		type = #{type},
+		type =	#{type},
 		invoke_time = #{invokeTime},
 		success = #{success},
 		failure = #{failure},
@@ -72,7 +72,7 @@
 		concurrent = #{concurrent},
 		max_elapsed = #{maxElapsed},
 		max_concurrent = #{maxConcurrent}
-		WHERE id = #{id}
+		WHERE id= #{id}
 	</update>
 
 	<delete id="deleteEntity" parameterType="java.lang.Long">
@@ -80,8 +80,8 @@
 		WHERE id = #{id}
 	</delete>
 
-	<select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke"
-		resultType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+	<select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay"
+		resultType="com.handu.open.dubbo.monitor.domain.DubboDelay">
 		SELECT
 		<include refid="entityObj" />
 		FROM dubbo_delay
@@ -96,11 +96,11 @@
 			<if test="invokeDateTo != null">
 				<![CDATA[AND invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
 			</if>
-			<if test="service != null and service!= '' ">
-				AND service = #{service}
+			<if test="serviceId != null and serviceId!= '' ">
+				AND service_id = #{serviceId}
 			</if>
-			<if test="method != null and method!= '' ">
-				AND method = #{method}
+			<if test="methodId != null and methodId!= '' ">
+				AND method_id = #{methodId}
 			</if>
 			<if test="consumer != null and consumer!= '' ">
 				AND consumer = #{consumer}
@@ -113,4 +113,149 @@
 			</if>
 		</where>
 	</select>
+
+	<select id="findLowServices" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay"
+		resultType="com.handu.open.dubbo.monitor.domain.ApplicationService">
+		SELECT COUNT(a.service_id) AS lowCount, a.service_id as id, b.name
+		FROM dubbo_delay a LEFT JOIN application_service b
+		ON a.service_id=b.id
+		<where>
+			1=1
+			<if test="invokeDate != null">
+				AND a.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+			</if>
+			<if test="invokeDateFrom != null">
+				<![CDATA[AND a.invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+			</if>
+			<if test="invokeDateTo != null">
+				<![CDATA[AND a.invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+			</if>
+			<if test="serviceId != null and serviceId!= '' ">
+				AND a.service_id = #{serviceId}
+			</if>
+			<if test="methodId != null and methodId!= '' ">
+				AND a.method_id = #{methodId}
+			</if>
+			<if test="consumer != null and consumer!= '' ">
+				AND a.consumer = #{consumer}
+			</if>
+			<if test="provider != null and provider!= '' ">
+				AND a.provider = #{provider}
+			</if>
+			<if test="type != null and type!= '' ">
+				AND a.type = #{type}
+			</if>
+		</where>
+		GROUP BY a.service_id;
+	</select>
+	<select id="getMethodsByService" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay"
+		resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+		SELECT
+		DISTINCT(a.method_id) as id,b.name,c.id as serviceId,c.name as serviceName
+		FROM
+		dubbo_delay a
+		LEFT JOIN application_service_method b ON a.method_id=b.id
+		LEFT JOIN application_service c ON a.service_id=c.id
+		<where>
+			1=1
+			<if test="invokeDate != null">
+				AND a.invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+			</if>
+			<if test="invokeDateFrom != null">
+				<![CDATA[AND a.invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+			</if>
+			<if test="invokeDateTo != null">
+				<![CDATA[AND a.invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+			</if>
+			<if test="serviceId != null and serviceId!= '' ">
+				AND a.service_id = #{serviceId}
+			</if>
+			<if test="methodId != null and methodId!= '' ">
+				AND a.method_id = #{methodId}
+			</if>
+			<if test="consumer != null and consumer!= '' ">
+				AND a.consumer = #{consumer}
+			</if>
+			<if test="provider != null and provider!= '' ">
+				AND a.provider = #{provider}
+			</if>
+			<if test="type != null and type!= '' ">
+				AND a.type = #{type}
+			</if>
+		</where>
+	</select>
+	<select id="countDubboDelayInfo" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay"
+		resultType="com.handu.open.dubbo.monitor.domain.DubboDelay">
+		SELECT
+		SUM(success) as success,
+		SUM(failure) as failure,
+		SUM(elapsed) as	elapsed,
+		MAX(max_elapsed) as maxElapsed,
+		MIN(max_concurrent) as	maxConcurrent
+		FROM dubbo_delay
+		<where>
+			1 = 1
+			<if test="invokeDate != null">
+				AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+			</if>
+			<if test="invokeDateFrom != null">
+				<![CDATA[AND invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+			</if>
+			<if test="invokeDateTo != null">
+				<![CDATA[AND invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+			</if>
+			<if test="serviceId != null and serviceId!= '' ">
+				AND service_id = #{serviceId}
+			</if>
+			<if test="methodId != null and methodId!= '' ">
+				AND method_id = #{methodId}
+			</if>
+			<if test="consumer != null and consumer!= '' ">
+				AND consumer = #{consumer}
+			</if>
+			<if test="provider != null and provider!= '' ">
+				AND provider = #{provider}
+			</if>
+			<if test="type != null and type!= '' ">
+				AND type = #{type}
+			</if>
+		</where>
+	</select>
+	<select id="countDubboDelay" parameterType="com.handu.open.dubbo.monitor.domain.DubboDelay" resultType="com.handu.open.dubbo.monitor.domain.DubboDelay">
+        SELECT
+        method_id as methodId,
+        type,
+        SUM(success) as success,
+        SUM(elapsed) / SUM(success) as elapsed,
+        invoke_time DIV #{timeParticle} * #{timeParticle} as invokeTime
+        FROM dubbo_delay
+
+        WHERE 1 = 1
+
+        <if test="invokeDate != null">
+			AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+		</if>
+		<if test="invokeDateFrom != null">
+			<![CDATA[AND invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+		</if>
+		<if test="invokeDateTo != null">
+			<![CDATA[AND invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+		</if>
+		<if test="serviceId != null and serviceId!= '' ">
+			AND service_id = #{serviceId}
+		</if>
+		<if test="methodId != null and methodId!= '' ">
+			AND method_id = #{methodId}
+		</if>
+		<if test="consumer != null and consumer!= '' ">
+			AND consumer = #{consumer}
+		</if>
+		<if test="provider != null and provider!= '' ">
+			AND provider = #{provider}
+		</if>
+		<if test="type != null and type!= '' ">
+			AND type = #{type}
+		</if>
+        GROUP BY invoke_time DIV #{timeParticle}
+    </select>
 </mapper>

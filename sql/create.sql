@@ -73,8 +73,8 @@ drop table if exists    `dubbo_delay`;
 CREATE TABLE `dubbo_delay` (
   `id` bigint(20) primary key AUTO_INCREMENT,
   `invoke_date` date NOT NULL,
-  `service` varchar(255) DEFAULT NULL,
-  `method` varchar(255) DEFAULT NULL,
+  `service_id` bigint(20) NOT NULL,
+  `method_id` bigint(20) NOT NULL,
   `consumer` varchar(255) DEFAULT NULL,
   `provider` varchar(255) DEFAULT NULL,
   `type` varchar(255) DEFAULT '',
@@ -86,8 +86,8 @@ CREATE TABLE `dubbo_delay` (
   `max_elapsed` int(11) DEFAULT NULL,
   `max_concurrent` int(11) DEFAULT NULL,
   KEY `invoke_date` (`invoke_date`),
-  KEY `index_service` (`service`) ,
-  KEY `index_method` (`method`)
+  KEY `index_service_id` (`service_id`) ,
+  KEY `index_method_id` (`method_id`)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ;
 
 DROP TABLE IF EXISTS `app_item`;

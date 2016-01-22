@@ -2,18 +2,25 @@ package com.handu.open.dubbo.monitor.service;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import com.alibaba.dubbo.monitor.MonitorService;
+import com.handu.open.dubbo.monitor.DubboMonitorService;
 import com.handu.open.dubbo.monitor.dao.base.ApplicationServiceMethodBaseDAO;
 import com.handu.open.dubbo.monitor.dao.base.DubboInvokeBaseDAO;
+import com.handu.open.dubbo.monitor.domain.ApplicationService;
 import com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod;
+import com.handu.open.dubbo.monitor.domain.DubboDelay;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 
 @Service
 public class DubboDelayService {
+	private static Logger logger = Logger.getLogger(DubboDelayService.class);
 	public static final String CLASSNAME = DubboDelayService.class.getName() + ".";
 	@Autowired
 	private DubboInvokeBaseDAO dubboInvokeDAO;
@@ -22,7 +29,7 @@ public class DubboDelayService {
 	@Autowired
 	private Environment env;
 
-	public void addSlowElapse(DubboInvoke obj, long elapse) {
+	public void addSlowElapse(DubboDelay obj, long elapse) {
 		if (obj.getElapsed() > elapse * obj.getSuccess()) {
 			dubboInvokeDAO.insert(CLASSNAME, "addEntity", obj);
 		}
@@ -32,44 +39,81 @@ public class DubboDelayService {
 		Long slowElapse = new Long(env.getProperty("monitor.slowElapse", "0"));
 		ApplicationServiceMethod asmObj = asmDao.getByServiceAndMethod(obj);
 		if (asmObj == null) {// 未定义方法慢查
-			if (slowElapse > 0) {// 使用全局定义
-				addSlowElapse(obj, slowElapse);
-			}
 			return;
 		}
+		DubboDelay dubboDelay = new DubboDelay();
+		BeanUtils.copyProperties(obj, dubboDelay);
+		dubboDelay.setServiceId(asmObj.getServiceId());
+		dubboDelay.setMethodId(asmObj.getId());
 		if (MonitorService.PROVIDER.equals(obj.getType())) {
 			if (asmObj.getMaxtimeProvider() > 0) {
-				addSlowElapse(obj, asmObj.getMaxtimeProvider());
+				addSlowElapse(dubboDelay, asmObj.getMaxtimeProvider());
 			} else if (slowElapse > 0) {
-				addSlowElapse(obj, slowElapse);
+				addSlowElapse(dubboDelay, slowElapse);
 			}
 		} else {
 			if (asmObj.getMaxtimeConsumer() > 0) {
-				addSlowElapse(obj, asmObj.getMaxtimeConsumer());
+				addSlowElapse(dubboDelay, asmObj.getMaxtimeConsumer());
 			} else if (slowElapse > 0) {
-				addSlowElapse(obj, slowElapse);
+				addSlowElapse(dubboDelay, slowElapse);
 			}
 		}
 	}
 
-	public DubboInvoke getById(long id) {
-		DubboInvoke param = new DubboInvoke();
+	public DubboDelay getById(long id) {
+		DubboDelay param = new DubboDelay();
 		param.setId(id);
-		DubboInvoke dbObj = dubboInvokeDAO.get(CLASSNAME, "findEntity", param);
+		DubboDelay dbObj = dubboInvokeDAO.get(CLASSNAME, "findEntity", param);
 		return dbObj;
 	}
 
-	public List<DubboInvoke> list() {
-		List<DubboInvoke> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity");
+	public List<ApplicationService> listLowServices(DubboDelay param) {
+		List<ApplicationService> list = dubboInvokeDAO.getList(CLASSNAME, "findLowServices", param);
 		return list;
 	}
 
-	public List<DubboInvoke> list(DubboInvoke param) {
-		List<DubboInvoke> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity", param);
+	public List<ApplicationServiceMethod> getMethodsByService(DubboDelay param) {
+		return dubboInvokeDAO.getList(CLASSNAME, "getMethodsByService", param);
+	}
+
+	/**
+	 * 统计各方法调用信息
+	 *
+	 * @param dubboInvoke
+	 * @return
+	 */
+	public List<DubboDelay> countDubboDelayInfo(DubboDelay param) {
+		if (StringUtils.isEmpty(param.getServiceId()) || StringUtils.isEmpty(param.getMethodId())) {
+			logger.error("统计查询缺少必要参数！");
+			throw new RuntimeException("统计查询缺少必要参数！");
+		}
+		return dubboInvokeDAO.getList(CLASSNAME, "countDubboDelayInfo", param);
+	}
+
+	/**
+	 * 统计调用数据用于图表展示
+	 *
+	 * @param param
+	 */
+	public List<DubboDelay> countDubboDelay(DubboDelay param) {
+		if (StringUtils.isEmpty(param.getServiceId())) {
+			logger.error("统计查询缺少必要参数！");
+			throw new RuntimeException("统计查询缺少必要参数！");
+		}
+		return dubboInvokeDAO.getList(CLASSNAME, "countDubboDelay", param);
+	}
+
+	public List<DubboDelay> list() {
+		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity");
 		return list;
 	}
 
-	public void update(DubboInvoke obj) {
+	public List<DubboDelay> list(DubboDelay param) {
+		List<DubboDelay> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity", param);
+		return list;
+	}
+
+	public void update(DubboDelay obj) {
 		dubboInvokeDAO.update(CLASSNAME, "updateEntity", obj);
 	}
 

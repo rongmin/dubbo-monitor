@@ -19,16 +19,17 @@ import java.io.Serializable;
 
 public class ApplicationServiceMethod implements Serializable {
 
-    /**
+	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5468082346847524044L;
 
 	private Long id;
 	private Long serviceId;
-    private String name ;
-    
-    private int maxtimeProvider, maxtimeConsumer;
+	private String name;
+	private String serviceName;
+
+	private int maxtimeProvider, maxtimeConsumer;
 
 	/**
 	 * @return the id
@@ -38,7 +39,8 @@ public class ApplicationServiceMethod implements Serializable {
 	}
 
 	/**
-	 * @param id the id to set
+	 * @param id
+	 *            the id to set
 	 */
 	public void setId(Long id) {
 		this.id = id;
@@ -52,14 +54,13 @@ public class ApplicationServiceMethod implements Serializable {
 	}
 
 	/**
-	 * @param serviceId the serviceId to set
+	 * @param serviceId
+	 *            the serviceId to set
 	 */
 	public void setServiceId(Long serviceId) {
 		this.serviceId = serviceId;
 	}
 
-
-	
 	/**
 	 * @return the name
 	 */
@@ -68,10 +69,19 @@ public class ApplicationServiceMethod implements Serializable {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	/**
@@ -82,7 +92,8 @@ public class ApplicationServiceMethod implements Serializable {
 	}
 
 	/**
-	 * @param maxtimeProvider the maxtimeProvider to set
+	 * @param maxtimeProvider
+	 *            the maxtimeProvider to set
 	 */
 	public void setMaxtimeProvider(int maxtimeProvider) {
 		this.maxtimeProvider = maxtimeProvider;
@@ -96,12 +107,11 @@ public class ApplicationServiceMethod implements Serializable {
 	}
 
 	/**
-	 * @param maxtimeConsumer the maxtimeConsumer to set
+	 * @param maxtimeConsumer
+	 *            the maxtimeConsumer to set
 	 */
 	public void setMaxtimeConsumer(int maxtimeConsumer) {
 		this.maxtimeConsumer = maxtimeConsumer;
 	}
 
-    
-    
 }

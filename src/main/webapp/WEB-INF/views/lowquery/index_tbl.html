@@ -1,0 +1,40 @@
+<table class="table table-hover table-striped">
+   <thead>
+   <tr>
+     <th>Service name</th>
+     <th>Low count</th>
+     <th>Application</th>
+     <th>Owner</th>
+     <th>Providers</th>
+     <th>Consumers</th>
+     <th>Statistics</th>
+     <th>Charts</th>
+   </tr>
+   </thead>
+   <tbody>
+   #for (row : rows)
+   <tr>
+     <td>${row.name}</td>
+     <td>${row.lowCount}</td>
+     <td>${row.application}</td>
+     <td>${row.owner} #if (row.organization) [${row.organization}] #end</td>
+     <td>
+       #if (row.providerCount > 0)
+       <a href="services/providers?service=${row.name}"><i class="fa fa-truck"></i> [${row.providerCount}]</a>
+       #else
+       <span class="badge bg-gray">No provider</span>
+       #end
+     </td>
+     <td>
+       #if (row.consumerCount > 0)
+       <a href="services/consumers?service=${row.name}"><i class="fa fa-credit-card"></i> [${row.consumerCount}]</a>
+       #else
+       <span class="badge bg-gray">No consumer</span>
+       #end
+     </td>
+     <td><a href="lowquery/statistics?serviceId=${row.serviceId}&invokeDateFrom=${vo.invokeDateFrom}&invokeDateTo=${vo.invokeDateTo}"><i class="fa fa-dashboard"></i></a></td>
+     <td><a href="lowquery/charts?serviceId=${row.serviceId}&invokeDateFrom=${vo.invokeDateFrom}&invokeDateTo=${vo.invokeDateTo}"><i class="fa fa-line-chart"></i></a></td>
+   </tr>
+   #end
+   </tbody>
+ </table>        

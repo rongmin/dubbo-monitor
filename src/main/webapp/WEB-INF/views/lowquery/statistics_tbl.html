@@ -1,0 +1,24 @@
+<table class="table table-hover table-striped">
+  <thead>
+  <tr>
+    <th>Method</th>
+    <th>Success</th>
+    <th>Failure</th>
+    <th>Avg Elapsed (ms)</th>
+    <th>Max Elapsed (ms)</th>
+    <th>Max Concurrent</th>
+  </tr>
+  </thead>
+  <tbody>
+  #for(row : rows)
+  <tr>
+    <td>${row.method}</td>
+    <td><span class="badge bg-gray">${row.consumerSuccess}</span> <i class="fa fa-arrow-circle-right"></i> <span class="badge bg-green">${row.providerSuccess}</span></td>
+    <td><span class="badge bg-gray">${row.consumerFailure}</span> <i class="fa fa-arrow-circle-right"></i> <span class="badge bg-green">${row.providerFailure}</span></td>
+    <td><span class="badge bg-gray">${row.consumerAvgElapsed}</span> <i class="fa fa-arrow-circle-right"></i> <span class="badge bg-green">${row.providerAvgElapsed}</span></td>
+    <td><span class="badge bg-gray">${row.consumerMaxElapsed}</span> <i class="fa fa-arrow-circle-right"></i> <span class="badge bg-green">${row.providerMaxElapsed}</span></td>
+    <td><span class="badge bg-gray">${row.consumerMaxConcurrent}</span> <i class="fa fa-arrow-circle-right"></i> <span class="badge bg-green">${row.providerMaxConcurrent}</span></td>
+  </tr>
+  #end
+  </tbody>
+</table>
