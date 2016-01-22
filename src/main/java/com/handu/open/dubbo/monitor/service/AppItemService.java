@@ -1,5 +1,6 @@
 package com.handu.open.dubbo.monitor.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -25,7 +26,7 @@ public class AppItemService {
 	}
 
 	public AppItem getByName(String name) {
-		if(StringUtils.isBlank(name)){
+		if (StringUtils.isBlank(name)) {
 			logger.error("查询name参数不能为空！");
 			throw new RuntimeException("查询name参数不能为空！");
 		}
@@ -37,11 +38,17 @@ public class AppItemService {
 
 	public List<AppItem> list() {
 		List<AppItem> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity");
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 
 	public List<AppItem> list(AppItem param) {
 		List<AppItem> list = dubboInvokeDAO.getList(CLASSNAME, "findEntity", param);
+		if (list == null) {
+			return Collections.emptyList();
+		}
 		return list;
 	}
 

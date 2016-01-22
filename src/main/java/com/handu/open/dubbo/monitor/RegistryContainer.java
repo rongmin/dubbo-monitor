@@ -22,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.annotation.PostConstruct;
@@ -163,7 +164,7 @@ public class RegistryContainer {
 	
 	public AppItem getHostsByApplication(String application) {
 		AppItem item = new AppItem();
-		Set<String> addresses = new HashSet<String>();
+		Set<String> addresses = new TreeSet<String>();
 		if (application != null && application.length() > 0) {
 			for (List<URL> providers : serviceProviders.values()) {
 				for (URL url : providers) {

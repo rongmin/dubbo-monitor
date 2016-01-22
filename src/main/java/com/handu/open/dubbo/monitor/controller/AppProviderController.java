@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.handu.open.dubbo.monitor.RegistryContainer;
 import com.handu.open.dubbo.monitor.domain.AppItem;
 import com.handu.open.dubbo.monitor.service.AppItemService;
 
@@ -16,10 +17,23 @@ import com.handu.open.dubbo.monitor.service.AppItemService;
 public class AppProviderController {
 	@Autowired
 	private AppItemService appItemService;
+	@Autowired
+	private RegistryContainer registryContainer;
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public String list(Model model) {
 		List<AppItem> rows = appItemService.list();
+		for (AppItem item : rows) {
+			AppItem regItem = registryContainer.getHostsByApplication(item.getName());
+			item.setRegister(regItem.getProvider());
+			item.setRegisterNum(regItem.getProviderNum());
+			if (!item.getProviderNum().equals(item.getRegisterNum())) {
+				item.setNumDiff(true);
+			}
+			if (!item.getProvider().equals(item.getRegister())) {
+				item.setDiff(true);
+			}
+		}
 		model.addAttribute("rows", rows);
 		return "appprovider/list";
 	}

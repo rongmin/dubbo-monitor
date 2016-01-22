@@ -1,3 +1,10 @@
+<style>
+<!--
+.error {
+	color: red
+}
+-->
+</style>
 #tag layout_block("mainContent")
 <section class="content-header">
   <h1>
@@ -41,6 +48,8 @@
               <th>Owner</th>
               <th>Providers numbers</th>
               <th>Providers hosts</th>
+              <th>Register numbers</th>
+              <th>Register hosts</th>
             </tr>
             </thead>
             <tbody>
@@ -50,6 +59,16 @@
               <td>${row.owner}</td>
               <td>${row.providerNum}</td>
               <td>${row.provider}</td>
+              #if (row.numDiff == false)
+              <td>${row.registerNum}</td>
+              #else
+              <td class="error">${row.registerNum}</td>
+              #end
+              #if (row.diff == false)
+              <td>${row.register}</td>
+              #else
+              <td class="error">${row.register}</td>
+              #end
             </tr>
             #end
             </tbody>
