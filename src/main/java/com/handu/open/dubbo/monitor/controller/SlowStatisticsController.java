@@ -22,8 +22,8 @@ import com.handu.open.dubbo.monitor.service.DubboDelayService;
 import com.handu.open.dubbo.monitor.vo.LowQueryVo;
 
 @Controller
-@RequestMapping("/lowquery/statistics")
-public class LowStatisticsController {
+@RequestMapping("/slowquery/statistics")
+public class SlowStatisticsController {
 	@Autowired
 	private DubboDelayService dubboDelayService;
 	@Autowired
@@ -34,7 +34,7 @@ public class LowStatisticsController {
 		ApplicationService service=applicationServiceBaseDAO.getApplicationServiceById(vo.getServiceId());
 		vo.setServiceName(service.getName());
 		model.addAttribute("vo",vo);
-		return "lowquery/statistics";
+		return "slowquery/statistics";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -82,7 +82,7 @@ public class LowStatisticsController {
 			statisticseList.add(dubboStatistics);
 		}
 		model.addAttribute("rows", statisticseList);
-		return "lowquery/statistics_tbl";
+		return "slowquery/statistics_tbl";
 	}
 	public static void main(String[] args) {
 		Calendar cc=Calendar.getInstance();

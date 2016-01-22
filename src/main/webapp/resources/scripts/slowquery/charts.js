@@ -30,7 +30,7 @@ $(function () {
 
 function loadData() {
     $.ajax({
-        type: "POST", url: "lowquery/charts/loadChartsData", dataType: "json", data: {
+        type: "POST", url: "slowquery/charts/loadChartsData", dataType: "json", data: {
             "serviceId": $('#serviceId').val(),
             "invokeDateFrom": new Date($('#invokeDateFrom').val().replace(new RegExp("-","gm"),"/") + ' 00:00:00'),
             "invokeDateTo": new Date($('#invokeDateTo').val().replace(new RegExp("-","gm"),"/") + ' 23:59:59')

@@ -9,6 +9,7 @@ $(function () {
     var dateTo = $('#invokeDateTo');
     //Date range picker
     rangePicker.daterangepicker({
+    	maxDate:moment(),
     	dateLimit:{days:30},//起止时间的最大间隔
         ranges: {
             'Today': [moment(), moment()],
@@ -27,16 +28,15 @@ $(function () {
         rangeSpan.html(dateFrom.val() + ' ~ ' + dateTo.val());
     	loadData();
     });
-    dateFrom.val(moment().format(dateFormat));
-    dateTo.val(moment().format(dateFormat));
     rangeSpan.html(dateFrom.val() + ' ~ ' + dateTo.val());
     loadData();
 });
 function loadData() {
     $.ajax({
-        type: "POST", url: "lowquery",  data: {
+        type: "POST", url: "slowquery/statistics",  data: {
             "invokeDateFrom": new Date($('#invokeDateFrom').val().replace(new RegExp("-","gm"),"/") + ' 00:00:00'),
-            "invokeDateTo": new Date($('#invokeDateTo').val().replace(new RegExp("-","gm"),"/") + ' 23:59:59')
+            "invokeDateTo": new Date($('#invokeDateTo').val().replace(new RegExp("-","gm"),"/") + ' 23:59:59'),
+            "serviceId":$('#serviceId').val()
         }, error: function (req, status, err) {
             alert('Failed reason: ' + err);
         }, success: function (data) {

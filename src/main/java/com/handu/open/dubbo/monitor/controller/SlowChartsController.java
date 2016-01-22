@@ -23,8 +23,8 @@ import com.handu.open.dubbo.monitor.support.CommonResponse;
 import com.handu.open.dubbo.monitor.vo.LowQueryVo;
 
 @Controller
-@RequestMapping("/lowquery/charts")
-public class LowChartsController {
+@RequestMapping("/slowquery/charts")
+public class SlowChartsController {
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	@Autowired
 	private DubboDelayService dubboDelayService;
@@ -58,7 +58,7 @@ public class LowChartsController {
 
 		model.addAttribute("vo", vo);
 
-		return "lowquery/charts";
+		return "slowquery/charts";
 	}
 
 	@ResponseBody

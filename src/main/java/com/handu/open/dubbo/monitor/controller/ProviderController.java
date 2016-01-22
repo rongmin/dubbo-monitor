@@ -13,8 +13,8 @@ import com.handu.open.dubbo.monitor.domain.AppItem;
 import com.handu.open.dubbo.monitor.service.AppItemService;
 
 @Controller
-@RequestMapping("/appprovider")
-public class AppProviderController {
+@RequestMapping("/provider")
+public class ProviderController {
 	@Autowired
 	private AppItemService appItemService;
 	@Autowired
@@ -35,6 +35,6 @@ public class AppProviderController {
 			}
 		}
 		model.addAttribute("rows", rows);
-		return "appprovider/list";
+		return "provider/list";
 	}
 }

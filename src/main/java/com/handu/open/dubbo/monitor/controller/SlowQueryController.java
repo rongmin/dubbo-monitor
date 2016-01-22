@@ -22,8 +22,8 @@ import com.handu.open.dubbo.monitor.service.DubboDelayService;
 import com.handu.open.dubbo.monitor.vo.LowQueryVo;
 
 @Controller
-@RequestMapping("/lowquery")
-public class LowQueryController {
+@RequestMapping("/slowquery")
+public class SlowQueryController {
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	@Autowired
 	private RegistryContainer registryContainer;
@@ -32,7 +32,7 @@ public class LowQueryController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public String index() {
-		return "lowquery/index";
+		return "slowquery/index";
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
@@ -78,7 +78,7 @@ public class LowQueryController {
 		vo.setInvokeDateFrom(DateFormatUtils.ISO_DATE_FORMAT.format(dubboInvoke.getInvokeDateFrom()));
 		vo.setInvokeDateTo(DateFormatUtils.ISO_DATE_FORMAT.format(dubboInvoke.getInvokeDateTo()));
 		model.addAttribute("vo", vo);
-		return "lowquery/index_tbl";
+		return "slowquery/index_tbl";
 	}
 
 }
