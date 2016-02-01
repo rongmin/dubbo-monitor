@@ -12,7 +12,7 @@
     
     
 	<!-- Add -->
-	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
+	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats"  keyProperty="id" useGeneratedKeys="true">
 		insert into
 		day_stats ( invoke_date , service_id, method_id,
 		success_provider,
@@ -30,9 +30,6 @@
 		#{failureConsumer},
 		#{elapsedConsumer}
 		)
-		<selectKey keyProperty="id" resultType="java.lang.Long">
-			SELECT LAST_INSERT_ID()
-		</selectKey>
 	</insert>
 
 	<update id="updateDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">

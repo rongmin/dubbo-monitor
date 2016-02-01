@@ -37,7 +37,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addDubboInvoke" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke">
+    <insert id="addDubboInvoke" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke"  keyProperty="id" useGeneratedKeys="true">
         insert into
         dubbo_invoke (
         <include refid="allNoAsOfDubboInvoke" />

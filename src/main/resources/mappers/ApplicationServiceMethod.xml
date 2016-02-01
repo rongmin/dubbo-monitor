@@ -4,13 +4,10 @@
 <mapper namespace="monitor">
     
     <!-- Add -->
-    <insert id="addApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+    <insert id="addApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod"  keyProperty="id" useGeneratedKeys="true">
         insert into
         application_service_method (     service_id,  name,maxtime_provider, maxtime_consumer  )
         values( #{serviceId}, #{name}, #{maxtimeProvider},#{maxtimeConsumer} )
-        <selectKey keyProperty="id" resultType="java.lang.Long">
-	    	SELECT LAST_INSERT_ID()
-	    </selectKey>
     </insert>
 
 

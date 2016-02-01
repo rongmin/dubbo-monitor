@@ -2,6 +2,7 @@ package com.handu.open.dubbo.monitor.service;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ import com.handu.open.dubbo.monitor.domain.ZabbixInvoke;
 public class ZabbixMonitorService {
 
 	public static final String CLASSNAME = ZabbixMonitorService.class.getName() + ".";
-	
+
 	@Autowired
 	private DubboInvokeBaseDAO dubboInvokeDAO;
 
@@ -22,6 +23,10 @@ public class ZabbixMonitorService {
 	}
 
 	public void saveOrUpdate(DubboInvoke di) {
+		if (StringUtils.isBlank(di.getService()) || StringUtils.isBlank(di.getMethod())
+				|| StringUtils.isBlank(di.getProvider())) {
+			throw new RuntimeException("service or method or provider can't not be empty.");
+		}
 		ZabbixInvoke zi = new ZabbixInvoke();
 		zi.setService(di.getService());
 		zi.setMethod(di.getMethod());

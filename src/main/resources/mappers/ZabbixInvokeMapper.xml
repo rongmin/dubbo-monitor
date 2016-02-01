@@ -30,7 +30,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+    <insert id="addZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke"  keyProperty="id" useGeneratedKeys="true">
         insert into zabbix_invoke (<include refid="zabbixInvokeColumn" />)
         values(        
         #{service},
@@ -48,14 +48,17 @@
     
     <update id="updateZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
 		update zabbix_invoke 
-		set	
-		invoke_time = #{invokeTime},
-		success = #{success},
-		failure = #{failure},
-		elapsed = #{elapsed},
-		concurrent = #{concurrent},
-		max_elapsed = #{maxElapsed},
-		max_concurrent = #{maxConcurrent}
+		<set>
+			<if test="invokeDate != null">
+				invoke_time = #{invokeTime},
+			</if>
+			success = #{success},
+			failure = #{failure},
+			elapsed = #{elapsed},
+			concurrent = #{concurrent},
+			max_elapsed = #{maxElapsed},
+			max_concurrent = #{maxConcurrent}
+		</set>	
 		where id = #{id}
 	</update>
 

@@ -15,8 +15,8 @@
  */
 package com.handu.open.dubbo.monitor.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
-import com.google.common.base.Preconditions;
+import java.sql.SQLException;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.BeansException;
@@ -29,6 +29,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import com.alibaba.druid.pool.DruidDataSource;
+import com.google.common.base.Preconditions;
+
 /**
  * MyBatis配置文件
  *
@@ -38,48 +41,77 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MyBatisConfig implements ApplicationContextAware {
 
-    @Autowired
-    private Environment env;
+	@Autowired
+	private Environment env;
 
-    private ApplicationContext context;
+	private ApplicationContext context;
 
-    private static final String DB_URL = "db.url";
-    private static final String DB_USERNAME = "db.username";
-    private static final String DB_PASSWORD = "db.password";
-    private static final String DB_MAX_ACTIVE = "db.maxActive";
+	private static final String DB_URL = "db.url";
+	private static final String DB_USERNAME = "db.username";
+	private static final String DB_PASSWORD = "db.password";
+	private static final String DB_MAX_ACTIVE = "db.maxActive";
 
-    @Bean
-    public DruidDataSource dataSource() {
-        final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
-        final String username = Preconditions.checkNotNull(env.getProperty(DB_USERNAME));
-        final String password = env.getProperty(DB_PASSWORD);
-        final int maxActive = Integer.parseInt(env.getProperty(DB_MAX_ACTIVE, "200"));
+	@Bean
+	public DruidDataSource dataSource() {
+		final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
+		final String username = Preconditions.checkNotNull(env.getProperty(DB_USERNAME));
+		final String password = env.getProperty(DB_PASSWORD);
+		final int maxActive = Integer.parseInt(env.getProperty(DB_MAX_ACTIVE, "200"));
 
-        DruidDataSource dataSource = new DruidDataSource();
-        dataSource.setUrl(url);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        dataSource.setMaxActive(maxActive);
+		DruidDataSource dataSource = new DruidDataSource();
+		dataSource.setUrl(url);
+		dataSource.setUsername(username);
+		dataSource.setPassword(password);
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
 
-        return dataSource;
-    }
+		dataSource.setMaxActive(maxActive);
+		dataSource.setInitialSize(5);
+		dataSource.setMaxWait(60000);
+		dataSource.setMinIdle(10);
 
-    @Bean
-    public SqlSessionFactory sqlSessionFactory() throws Exception {
-        SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
-        factoryBean.setDataSource(dataSource());
-        factoryBean.setMapperLocations(context.getResources("classpath*:mappers/**/*.xml"));
-        return factoryBean.getObject();
-    }
+		dataSource.setTimeBetweenEvictionRunsMillis(60000);
+		dataSource.setMinEvictableIdleTimeMillis(300000);
 
-    @Bean
-    public DataSourceTransactionManager transactionManager() {
-        DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-        transactionManager.setDataSource(dataSource());
-        return transactionManager;
-    }
+		dataSource.setValidationQuery("SELECT 'x'");
+		dataSource.setTestWhileIdle(true);
+		dataSource.setTestOnBorrow(false);
+		dataSource.setTestOnReturn(false);
+		dataSource.setMaxOpenPreparedStatements(maxActive);
+		
+		// 打开PSCache，并且指定每个连接上PSCache的大小,如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。分库分表较多的数据库，建议配置为false
+		dataSource.setPoolPreparedStatements(false);
+		dataSource.setMaxPoolPreparedStatementPerConnectionSize(maxActive);
 
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        context = applicationContext;
-    }
+		dataSource.setRemoveAbandoned(false);// 禁用对于长时间不使用的连接强制关闭的功能
+		dataSource.setRemoveAbandonedTimeout(1800);// 超过30分钟开始关闭空闲连接，由于removeAbandoned为false，这个设置项不再起作用
+		dataSource.setLogAbandoned(true);// 关闭abanded连接时输出错误日志，由于removeAbandoned为false，这个设置项不再起作用
+
+		try {
+			dataSource.setFilters("stat");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return dataSource;
+	}
+
+	@Bean
+	public SqlSessionFactory sqlSessionFactory() throws Exception {
+		SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
+		factoryBean.setConfigLocation(context.getResource("classpath:mybatis-config.xml"));
+		factoryBean.setDataSource(dataSource());
+		factoryBean.setMapperLocations(context.getResources("classpath*:mappers/**/*.xml"));
+		return factoryBean.getObject();
+	}
+
+	@Bean
+	public DataSourceTransactionManager transactionManager() {
+		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
+		transactionManager.setDataSource(dataSource());
+		return transactionManager;
+	}
+
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		context = applicationContext;
+	}
 }

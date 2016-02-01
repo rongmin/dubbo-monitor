@@ -18,7 +18,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem">
+    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO app_item (<include refid="entityColumn" />)
         VALUES(        
         #{name},
@@ -26,9 +26,6 @@
         #{owner},
         #{provider}
         )
-        <selectKey keyProperty="id" resultType="java.lang.Long">
-	    	SELECT LAST_INSERT_ID()
-	    </selectKey>
     </insert>
     
     <update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppItem">

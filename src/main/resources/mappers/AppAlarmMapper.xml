@@ -18,7 +18,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO app_alarm (<include refid="entityColumn" />)
         VALUES(        
         #{appId},

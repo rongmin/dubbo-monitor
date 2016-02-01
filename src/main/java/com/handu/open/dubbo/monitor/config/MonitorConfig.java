@@ -19,6 +19,7 @@ import com.alibaba.dubbo.config.annotation.Service;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.PropertySource;
 
 /**
@@ -30,5 +31,6 @@ import org.springframework.context.annotation.PropertySource;
 @ComponentScan(basePackages = {"com.handu.open.dubbo.monitor"}, includeFilters = {@ComponentScan.Filter(value = Service.class)})
 @Import({WebConfig.class, DubboConfig.class, MyBatisConfig.class, Security.class})
 @PropertySource("classpath:/application.properties")
+@ImportResource("classpath:applicationLdap.xml")
 public class MonitorConfig {
 }
