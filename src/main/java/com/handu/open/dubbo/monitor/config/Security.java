@@ -15,19 +15,17 @@
  */
 package com.handu.open.dubbo.monitor.config;
 
-import java.util.Map;
-import java.util.Set;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import com.google.common.base.Preconditions;
 import com.handu.open.dubbo.monitor.users.Users;
 
 
@@ -35,26 +33,23 @@ import com.handu.open.dubbo.monitor.users.Users;
 @EnableWebSecurity
 public class Security extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    Environment env;
-    
-    @Autowired
-    @Qualifier("usersMap")
-    Users users;
+//    @Autowired
+//    @Qualifier("usersMap")
+//    Users users;
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-    	Map<String, String> m = users.getMap();
-    	Set<String> set = m.keySet();
-    	for(String str:set){
-    		auth.inMemoryAuthentication()
-            .withUser(str)
-            .password(m.get(str))
-            .roles("MANAGER");	
-    	}
-                
-    }
-
+//    @Autowired
+//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+//    	Map<String, String> m = users.getMap();
+//    	Set<String> set = m.keySet();
+//    	for(String str:set){
+//    		auth.inMemoryAuthentication()
+//            .withUser(str)
+//            .password(m.get(str))
+//            .roles("MANAGER");	
+//    	}
+//                
+//    }
+	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
@@ -62,4 +57,17 @@ public class Security extends WebSecurityConfigurerAdapter {
                 .and()
                 .httpBasic();
     }
+    
+    @Configuration
+	protected static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
+		@Autowired
+		Environment env;
+
+		@Override
+		public void init(AuthenticationManagerBuilder auth) throws Exception {
+			final String userDn = Preconditions.checkNotNull(env.getProperty("ldap.userDn"));
+			final String base = Preconditions.checkNotNull(env.getProperty("ldap.base"));
+			auth.ldapAuthentication().userDnPatterns(userDn).contextSource().url(base);
+		}
+	}
 }

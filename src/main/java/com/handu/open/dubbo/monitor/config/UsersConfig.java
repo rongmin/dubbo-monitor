@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
 
-@Configuration
+//@Configuration
 @ImportResource("classpath:accounts.xml")
 public class UsersConfig {
 
