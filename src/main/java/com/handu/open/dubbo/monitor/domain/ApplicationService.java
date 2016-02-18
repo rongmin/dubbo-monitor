@@ -26,7 +26,7 @@ public class ApplicationService implements Serializable {
 
 	private Long id;
 	private String name;
-	private int lowCount;
+	private int slowCount;
 
 	/**
 	 * @return the name
@@ -58,12 +58,12 @@ public class ApplicationService implements Serializable {
 		this.id = id;
 	}
 
-	public int getLowCount() {
-		return lowCount;
+	public int getSlowCount() {
+		return slowCount;
 	}
 
-	public void setLowCount(int lowCount) {
-		this.lowCount = lowCount;
+	public void setSlowCount(int slowCount) {
+		this.slowCount = slowCount;
 	}
 
 }

@@ -19,10 +19,10 @@ import com.handu.open.dubbo.monitor.domain.ApplicationService;
 import com.handu.open.dubbo.monitor.domain.DubboDelay;
 import com.handu.open.dubbo.monitor.domain.DubboService;
 import com.handu.open.dubbo.monitor.service.DubboDelayService;
-import com.handu.open.dubbo.monitor.vo.LowQueryVo;
+import com.handu.open.dubbo.monitor.vo.SlowQueryVo;
 
 @Controller
-@RequestMapping("/slowquery")
+@RequestMapping("/slowquery/query")
 public class SlowQueryController {
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	@Autowired
@@ -36,14 +36,14 @@ public class SlowQueryController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
-	public String loadData(@ModelAttribute DubboDelay dubboInvoke, Model model) {
-		if (dubboInvoke.getInvokeDate() == null && dubboInvoke.getInvokeDateFrom() == null
-				&& dubboInvoke.getInvokeDateTo() == null) {
-			dubboInvoke.setInvokeDate(new Date());
+	public String loadData(@ModelAttribute DubboDelay dubboDelay, Model model) {
+		if (dubboDelay.getInvokeDate() == null && dubboDelay.getInvokeDateFrom() == null
+				&& dubboDelay.getInvokeDateTo() == null) {
+			dubboDelay.setInvokeDate(new Date());
 		}
 
 		List<DubboService> rows = new ArrayList<DubboService>();
-		List<ApplicationService> services = dubboDelayService.listLowServices(dubboInvoke);
+		List<ApplicationService> services = dubboDelayService.listSlowServices(dubboDelay);
 
 		if (services != null && services.size() > 0) {
 			DubboService dubboService;
@@ -51,7 +51,7 @@ public class SlowQueryController {
 				dubboService = new DubboService();
 				dubboService.setServiceId(service.getId());
 				dubboService.setName(service.getName());
-				dubboService.setLowCount(service.getLowCount());
+				dubboService.setSlowCount(service.getSlowCount());
 
 				List<URL> providers = registryContainer.getProvidersByService(service.getName());
 				int providerSize = providers == null ? 0 : providers.size();
@@ -74,9 +74,9 @@ public class SlowQueryController {
 		}
 
 		model.addAttribute("rows", rows);
-		LowQueryVo vo = new LowQueryVo();
-		vo.setInvokeDateFrom(DateFormatUtils.ISO_DATE_FORMAT.format(dubboInvoke.getInvokeDateFrom()));
-		vo.setInvokeDateTo(DateFormatUtils.ISO_DATE_FORMAT.format(dubboInvoke.getInvokeDateTo()));
+		SlowQueryVo vo = new SlowQueryVo();
+		vo.setInvokeDateFrom(DateFormatUtils.ISO_DATE_FORMAT.format(dubboDelay.getInvokeDateFrom()));
+		vo.setInvokeDateTo(DateFormatUtils.ISO_DATE_FORMAT.format(dubboDelay.getInvokeDateTo()));
 		model.addAttribute("vo", vo);
 		return "slowquery/index_tbl";
 	}

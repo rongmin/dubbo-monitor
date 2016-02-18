@@ -1,6 +1,6 @@
 package com.handu.open.dubbo.monitor.vo;
 
-public class LowQueryVo {
+public class SlowQueryVo {
 	private Long serviceId;
 	private String serviceName;
 	private String invokeDateFrom;

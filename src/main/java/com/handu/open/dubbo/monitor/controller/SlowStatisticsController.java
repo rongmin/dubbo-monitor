@@ -19,7 +19,7 @@ import com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod;
 import com.handu.open.dubbo.monitor.domain.DubboDelay;
 import com.handu.open.dubbo.monitor.domain.DubboStatistics;
 import com.handu.open.dubbo.monitor.service.DubboDelayService;
-import com.handu.open.dubbo.monitor.vo.LowQueryVo;
+import com.handu.open.dubbo.monitor.vo.SlowQueryVo;
 
 @Controller
 @RequestMapping("/slowquery/statistics")
@@ -30,7 +30,7 @@ public class SlowStatisticsController {
 	private ApplicationServiceBaseDAO applicationServiceBaseDAO;
 	
 	@RequestMapping(method = RequestMethod.GET)
-	public String index(@ModelAttribute LowQueryVo vo, Model model) {
+	public String index(@ModelAttribute SlowQueryVo vo, Model model) {
 		ApplicationService service=applicationServiceBaseDAO.getApplicationServiceById(vo.getServiceId());
 		vo.setServiceName(service.getName());
 		model.addAttribute("vo",vo);

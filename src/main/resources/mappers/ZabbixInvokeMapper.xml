@@ -30,7 +30,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke"  keyProperty="id" useGeneratedKeys="true">
+    <insert id="addZabbixInvoke" parameterType="ZabbixInvoke"  keyProperty="id" useGeneratedKeys="true">
         insert into zabbix_invoke (<include refid="zabbixInvokeColumn" />)
         values(        
         #{service},
@@ -46,7 +46,7 @@
         )
     </insert>
     
-    <update id="updateZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+    <update id="updateZabbixInvoke" parameterType="ZabbixInvoke">
 		update zabbix_invoke 
 		<set>
 			<if test="invokeDate != null">
@@ -62,7 +62,7 @@
 		where id = #{id}
 	</update>
 
-    <select id="getZabbixInvoke" parameterType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke" resultType="com.handu.open.dubbo.monitor.domain.ZabbixInvoke">
+    <select id="getZabbixInvoke" parameterType="ZabbixInvoke" resultType="ZabbixInvoke">
         SELECT <include refid="zabbixInvokeObj" /> FROM zabbix_invoke
         where service = #{service} AND method = #{method} AND provider = #{provider}
     </select>

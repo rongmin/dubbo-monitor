@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handu.open.dubbo.monitor.service.DelayStatusService">
+
+	<sql id="entityColumn">
+		invoke_date,
+		service_id,
+		method_id,
+		success_provider,
+		failure_provider,
+		elapsed_provider,
+		success_consumer,
+		failure_consumer,
+		elapsed_consumer
+	</sql>
+
+
+	<sql id="entityObj">
+		id,
+		invoke_date as invokeDate,
+		service_id as serviceId,
+		method_id as methodId,
+		success_provider as successProvider,
+		failure_provider as failureProvider,
+		elapsed_provider as	elapsedProvider,
+		success_consumer as successConsumer,
+		failure_consumer as failureConsumer,
+		elapsed_consumer as elapsedConsumer
+	</sql>
+
+
+	<!-- Add -->
+	<insert id="addEntity" parameterType="DayStats" keyProperty="id" useGeneratedKeys="true">
+		insert into
+		delay_stats (
+		<include refid="entityColumn" />
+		)
+		values(
+		#{invokeDate},
+		#{serviceId},
+		#{methodId},
+		#{successProvider},
+		#{failureProvider},
+		#{elapsedProvider},
+		#{successConsumer},
+		#{failureConsumer},
+		#{elapsedConsumer}
+		)
+	</insert>
+
+	<update id="updateEntity" parameterType="DayStats">
+		update
+		delay_stats set
+		success_provider = success_provider + #{successProvider},
+		failure_provider = failure_provider + #{failureProvider} ,
+		elapsed_provider = elapsed_provider + #{elapsedProvider},
+		success_consumer = success_consumer + #{successConsumer},
+		failure_consumer = failure_consumer + #{failureConsumer},
+		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} 
+		where id =	#{id}
+	</update>
+
+	<select id="getByInvokeDateAndServiceMethod" parameterType="DayStats" resultType="java.lang.Long">
+		SELECT
+		id FROM delay_stats 
+		where invoke_date = #{invokeDate}
+		and service_id= #{serviceId} 
+		and method_id =	#{methodId}
+	</select>
+
+	<select id="findEntity" parameterType="DubboDelay" resultType="DayStats">
+		SELECT
+		<include refid="entityObj" />
+		FROM delay_stats
+		<where>
+			1=1
+			<if test="invokeDate != null">
+				AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+			</if>
+			<if test="invokeDateFrom != null">
+				<![CDATA[AND invoke_date >= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')]]>
+			</if>
+			<if test="invokeDateTo != null">
+				<![CDATA[AND invoke_date <= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')]]>
+			</if>
+		</where>
+	</select>
+
+
+
+</mapper>

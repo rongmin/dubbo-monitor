@@ -34,7 +34,7 @@ $(function () {
 });
 function loadData() {
     $.ajax({
-        type: "POST", url: "slowquery",  data: {
+        type: "POST", url: "slowquery/query",  data: {
             "invokeDateFrom": new Date($('#invokeDateFrom').val().replace(new RegExp("-","gm"),"/") + ' 00:00:00'),
             "invokeDateTo": new Date($('#invokeDateTo').val().replace(new RegExp("-","gm"),"/") + ' 23:59:59')
         }, error: function (req, status, err) {

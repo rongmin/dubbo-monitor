@@ -3,18 +3,25 @@
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="monitor">
 
+	<sql id="dayStatscolumntoProperty">
+		id,
+		invoke_date as invokeDate,
+		service_id as serviceId,
+		method_id as methodId,
+		success_provider as successProvider,
+		failure_provider as failureProvider ,
+		elapsed_provider as elapsedProvider,
+		success_consumer as successConsumer,
+		failure_consumer as failureConsumer,
+		elapsed_consumer as elapsedConsumer
+	</sql>
 
- <sql id="dayStatscolumntoProperty">
-         id,		invoke_date as invokeDate,			service_id as serviceId,		method_id as methodId,		success_provider as successProvider,
-		failure_provider as failureProvider ,		elapsed_provider as elapsedProvider,		success_consumer as successConsumer,		failure_consumer as failureConsumer,
-		elapsed_consumer as elapsedConsumer		
-    </sql>
-    
-    
+
 	<!-- Add -->
-	<insert id="addDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats"  keyProperty="id" useGeneratedKeys="true">
+	<insert id="addDayStats" parameterType="DayStats" keyProperty="id"	useGeneratedKeys="true">
 		insert into
-		day_stats ( invoke_date , service_id, method_id,
+		day_stats ( invoke_date , service_id,
+		method_id,
 		success_provider,
 		failure_provider ,
 		elapsed_provider ,
@@ -32,41 +39,46 @@
 		)
 	</insert>
 
-	<update id="updateDayStats" parameterType="com.handu.open.dubbo.monitor.domain.DayStats">
+	<update id="updateDayStats" parameterType="DayStats">
 		update
-		day_stats set	success_provider = success_provider + #{successProvider},
+		day_stats set
+		success_provider = success_provider + #{successProvider},
 		failure_provider = failure_provider + #{failureProvider} ,
 		elapsed_provider = elapsed_provider + #{elapsedProvider},
 		success_consumer = success_consumer + #{successConsumer},
 		failure_consumer = failure_consumer + #{failureConsumer},
-		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} where id = #{id}#
+		elapsed_consumer = elapsed_consumer + #{elapsedConsumer} where id =	#{id}#
 	</update>
 
-	<select id="getAllDayStats"
-		resultType="com.handu.open.dubbo.monitor.domain.DayStats">
-		SELECT   <include refid="dayStatscolumntoProperty" /> FROM day_stats
-	</select>	
-	
-	<select id="getDayStatByInvokeDateAndMethod" resultType="java.lang.Long">
-		SELECT id	FROM day_stats where invoke_date = #{invokeDate} and   method_id = #{methodId}
+	<select id="getAllDayStats" resultType="DayStats">
+		SELECT
+		<include refid="dayStatscolumntoProperty" />
+		FROM day_stats
 	</select>
-	
-	<select id="countApplication" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" 
-	resultType="com.handu.open.dubbo.monitor.domain.DayStats">
-        SELECT  <include refid="dayStatscolumntoProperty" />         FROM day_stats
-        WHERE         1 = 1 
-                
-        <if test="invokeDate != null">
-            AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
-        </if>
-        <if test="invokeDateFrom != null">
-            AND invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
-        </if>
-        <if test="invokeDateTo != null">
-            AND invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
-        </if>        
-    </select>
-	
-	
-	
+
+	<select id="getDayStatByInvokeDateAndMethod" parameterType="DayStats" resultType="java.lang.Long">
+		SELECT id FROM day_stats where invoke_date = #{invokeDate}
+		and method_id = #{methodId}
+	</select>
+
+	<select id="countApplication" parameterType="DubboInvoke"
+		resultType="DayStats">
+		SELECT
+		<include refid="dayStatscolumntoProperty" />
+		FROM day_stats
+		WHERE 1 = 1
+
+		<if test="invokeDate != null">
+			AND invoke_date = DATE_FORMAT(#{invokeDate},'%Y-%m-%d')
+		</if>
+		<if test="invokeDateFrom != null">
+			AND invoke_date &gt;= DATE_FORMAT(#{invokeDateFrom},'%Y-%m-%d')
+		</if>
+		<if test="invokeDateTo != null">
+			AND invoke_date &lt;= DATE_FORMAT(#{invokeDateTo},'%Y-%m-%d')
+		</if>
+	</select>
+
+
+
 </mapper>

@@ -4,7 +4,7 @@
 <mapper namespace="monitor">
     
     <!-- Add -->
-    <insert id="addApplicationService" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationService"  keyProperty="id" useGeneratedKeys="true">
+    <insert id="addApplicationService" parameterType="ApplicationService"  keyProperty="id" useGeneratedKeys="true">
         insert into
         application_service (    name  )
         values(
@@ -12,7 +12,7 @@
     </insert>
 
 
-    <select id="getAllApplicationService" resultType="com.handu.open.dubbo.monitor.domain.ApplicationService">
+    <select id="getAllApplicationService" resultType="ApplicationService">
         SELECT id, name FROM application_service
     </select>
 </mapper>

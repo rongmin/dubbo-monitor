@@ -80,8 +80,7 @@
 		WHERE id = #{id}
 	</delete>
 
-	<select id="findEntity" parameterType="DubboDelay"
-		resultType="DubboDelay">
+	<select id="findEntity" parameterType="DubboDelay"	resultType="DubboDelay">
 		SELECT
 		<include refid="entityObj" />
 		FROM dubbo_delay
@@ -114,9 +113,8 @@
 		</where>
 	</select>
 
-	<select id="findLowServices" parameterType="DubboDelay"
-		resultType="com.handu.open.dubbo.monitor.domain.ApplicationService">
-		SELECT COUNT(a.service_id) AS lowCount, a.service_id as id, b.name
+	<select id="findSlowServices" parameterType="DubboDelay" resultType="ApplicationService">
+		SELECT COUNT(a.service_id) AS slowCount, a.service_id as id, b.name
 		FROM dubbo_delay a LEFT JOIN application_service b
 		ON a.service_id=b.id
 		<where>
@@ -148,8 +146,7 @@
 		</where>
 		GROUP BY a.service_id;
 	</select>
-	<select id="getMethodsByService" parameterType="DubboDelay"
-		resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+	<select id="getMethodsByService" parameterType="DubboDelay"	resultType="ApplicationServiceMethod">
 		SELECT
 		DISTINCT(a.method_id) as id,b.name,c.id as serviceId,c.name as serviceName
 		FROM
@@ -184,8 +181,7 @@
 			</if>
 		</where>
 	</select>
-	<select id="countDubboDelayInfo" parameterType="DubboDelay"
-		resultType="DubboDelay">
+	<select id="countDubboDelayInfo" parameterType="DubboDelay"	resultType="DubboDelay">
 		SELECT
 		SUM(success) as success,
 		SUM(failure) as failure,

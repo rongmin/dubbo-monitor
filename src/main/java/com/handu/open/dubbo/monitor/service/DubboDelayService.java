@@ -26,13 +26,19 @@ public class DubboDelayService {
 	private DubboInvokeBaseDAO dubboInvokeDAO;
 	@Autowired
 	private ApplicationServiceMethodBaseDAO asmDao;
+	
+	@Autowired
+	private DelayStatusHandler delayStatusHandler;
 	@Autowired
 	private Environment env;
 
 	public void addSlowElapse(DubboDelay obj, long elapse) {
 		if (obj.getElapsed() > elapse * obj.getSuccess()) {
 			dubboInvokeDAO.insert(CLASSNAME, "addEntity", obj);
+			
 		}
+		//TODO 为了测试数据，暂时放在if外面
+		delayStatusHandler.add(obj);
 	}
 
 	public void add(DubboInvoke obj) {
@@ -67,8 +73,8 @@ public class DubboDelayService {
 		return dbObj;
 	}
 
-	public List<ApplicationService> listLowServices(DubboDelay param) {
-		List<ApplicationService> list = dubboInvokeDAO.getList(CLASSNAME, "findLowServices", param);
+	public List<ApplicationService> listSlowServices(DubboDelay param) {
+		List<ApplicationService> list = dubboInvokeDAO.getList(CLASSNAME, "findSlowServices", param);
 		if (list == null) {
 			return Collections.emptyList();
 		}

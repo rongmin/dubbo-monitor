@@ -16,49 +16,46 @@
 package com.handu.open.dubbo.monitor.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
 import com.google.common.base.Preconditions;
-import com.handu.open.dubbo.monitor.users.Users;
-
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class Security extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    @Qualifier("usersMap")
-//    Users users;
+	// @Autowired
+	// @Qualifier("usersMap")
+	// Users users;
 
-//    @Autowired
-//    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-//    	Map<String, String> m = users.getMap();
-//    	Set<String> set = m.keySet();
-//    	for(String str:set){
-//    		auth.inMemoryAuthentication()
-//            .withUser(str)
-//            .password(m.get(str))
-//            .roles("MANAGER");	
-//    	}
-//                
-//    }
+	// @Autowired
+	// public void configureGlobal(AuthenticationManagerBuilder auth) throws
+	// Exception {
+	// Map<String, String> m = users.getMap();
+	// Set<String> set = m.keySet();
+	// for(String str:set){
+	// auth.inMemoryAuthentication()
+	// .withUser(str)
+	// .password(m.get(str))
+	// .roles("MANAGER");
+	// }
+	//
+	// }
 	@Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authorizeRequests()
-                .anyRequest().authenticated()
-                .and()
-                .httpBasic();
-    }
-    
-    @Configuration
+	protected void configure(HttpSecurity http) throws Exception {
+		http.csrf().disable();
+		http.authorizeRequests().antMatchers("/resources/**").permitAll().anyRequest().fullyAuthenticated().and().formLogin();
+	}
+
+	@Configuration
 	protected static class AuthenticationConfiguration extends GlobalAuthenticationConfigurerAdapter {
 		@Autowired
 		Environment env;

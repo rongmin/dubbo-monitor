@@ -4,21 +4,21 @@
 <mapper namespace="monitor">
     
     <!-- Add -->
-    <insert id="addApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod"  keyProperty="id" useGeneratedKeys="true">
+    <insert id="addApplicationServiceMethod" parameterType="ApplicationServiceMethod"  keyProperty="id" useGeneratedKeys="true">
         insert into
         application_service_method (     service_id,  name,maxtime_provider, maxtime_consumer  )
         values( #{serviceId}, #{name}, #{maxtimeProvider},#{maxtimeConsumer} )
     </insert>
 
 
-    <select id="getAllApplicationServiceMethod" resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+    <select id="getAllApplicationServiceMethod" resultType="ApplicationServiceMethod">
         SELECT id, service_id as serviceId,name,
         maxtime_provider as maxtimeProvider,
         maxtime_consumer as maxtimeConsumer
          FROM application_service_method
     </select>
     
-    <select id="findApplicationServiceMethod" parameterType="com.handu.open.dubbo.monitor.domain.DubboInvoke" resultType="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod">
+    <select id="findApplicationServiceMethod" parameterType="DubboInvoke" resultType="ApplicationServiceMethod">
     	SELECT 
     	a.id,
     	a.service_id as serviceId,

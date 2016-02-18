@@ -31,7 +31,7 @@ public class DubboService implements Serializable {
 	private String owner;
 	private int providerCount;
 	private int consumerCount;
-	private int lowCount;
+	private int slowCount;
 
 	public Long getServiceId() {
 		return serviceId;
@@ -89,12 +89,12 @@ public class DubboService implements Serializable {
 		this.consumerCount = consumerCount;
 	}
 
-	public int getLowCount() {
-		return lowCount;
+	public int getSlowCount() {
+		return slowCount;
 	}
 
-	public void setLowCount(int lowCount) {
-		this.lowCount = lowCount;
+	public void setSlowCount(int slowCount) {
+		this.slowCount = slowCount;
 	}
 
 }

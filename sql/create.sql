@@ -111,3 +111,18 @@ CREATE TABLE `app_alarm` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `delay_stats`;
+CREATE TABLE `delay_stats` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `invoke_date` date NOT NULL,
+  `service_id` bigint(20) NOT NULL,
+  `method_id` bigint(20) NOT NULL,
+  `success_provider` bigint(20) NOT NULL,
+  `failure_provider` bigint(20) NOT NULL,
+  `elapsed_provider` bigint(20) NOT NULL,
+  `success_consumer` bigint(20) NOT NULL,
+  `failure_consumer` bigint(20) NOT NULL,
+  `elapsed_consumer` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `invoke_date_service_method` (`invoke_date`,`service_id`,`method_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

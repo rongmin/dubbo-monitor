@@ -2,7 +2,7 @@
    <thead>
    <tr>
      <th>Service name</th>
-     <th>Low count</th>
+     <th>Slow count</th>
      <th>Application</th>
      <th>Owner</th>
      <th>Providers</th>
@@ -15,7 +15,7 @@
    #for (row : rows)
    <tr>
      <td>${row.name}</td>
-     <td>${row.lowCount}</td>
+     <td>${row.slowCount}</td>
      <td>${row.application}</td>
      <td>${row.owner} #if (row.organization) [${row.organization}] #end</td>
      <td>

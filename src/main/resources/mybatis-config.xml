@@ -11,5 +11,12 @@
 	<typeAliases>
 		<!--这里给实体类取别名，方便在mapper配置文件中使用 -->
 		<typeAlias alias="DubboDelay" type="com.handu.open.dubbo.monitor.domain.DubboDelay" />
+		<typeAlias alias="DayStats" type="com.handu.open.dubbo.monitor.domain.DayStats" />
+		<typeAlias alias="DubboInvoke" type="com.handu.open.dubbo.monitor.domain.DubboInvoke" />
+		<typeAlias alias="ZabbixInvoke" type="com.handu.open.dubbo.monitor.domain.ZabbixInvoke" />
+		<typeAlias alias="ApplicationService" type="com.handu.open.dubbo.monitor.domain.ApplicationService" />
+		<typeAlias alias="ApplicationServiceMethod" type="com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod" />
+		<typeAlias alias="AppItem" type="com.handu.open.dubbo.monitor.domain.AppItem" />
+		<typeAlias alias="AppAlarm" type="com.handu.open.dubbo.monitor.domain.AppAlarm" />
 	</typeAliases>
 </configuration>  

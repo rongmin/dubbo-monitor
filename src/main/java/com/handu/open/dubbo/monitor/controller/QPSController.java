@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.common.collect.Lists;
-import com.handu.open.dubbo.monitor.DubboMonitorService;
 import com.handu.open.dubbo.monitor.dao.DayStatsDAO;
 import com.handu.open.dubbo.monitor.domain.DubboInvoke;
 import com.handu.open.dubbo.monitor.domain.DubboInvokeLineChartV2;
@@ -49,9 +48,6 @@ public class QPSController {
 
 	@Autowired
 	DayStatsDAO dayStatsDAO;
-	
-	@Autowired
-    private DubboMonitorService dubboMonitorService;
 
     @RequestMapping(method = RequestMethod.GET)
     public String home() {

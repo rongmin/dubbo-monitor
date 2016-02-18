@@ -18,7 +18,7 @@
     </sql>
 
     <!-- Add -->
-    <insert id="addEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm" keyProperty="id" useGeneratedKeys="true">
+    <insert id="addEntity" parameterType="AppAlarm" keyProperty="id" useGeneratedKeys="true">
         INSERT INTO app_alarm (<include refid="entityColumn" />)
         VALUES(        
         #{appId},
@@ -28,7 +28,7 @@
         )
     </insert>
     
-    <update id="updateEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+    <update id="updateEntity" parameterType="AppAlarm">
 		UPDATE app_alarm SET	
 		app_id = #{appId},
 		provider_num = #{providerNum},
@@ -41,7 +41,7 @@
 		DELETE FROM app_alarm WHERE id = #{id}
 	</delete>
 
-    <select id="findEntity" parameterType="com.handu.open.dubbo.monitor.domain.AppAlarm" resultType="com.handu.open.dubbo.monitor.domain.AppAlarm">
+    <select id="findEntity" parameterType="AppAlarm" resultType="AppAlarm">
         SELECT <include refid="entityObj" />
         FROM app_alarm
         <where>

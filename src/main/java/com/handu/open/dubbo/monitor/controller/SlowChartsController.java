@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.handu.open.dubbo.monitor.dao.base.ApplicationServiceBaseDAO;
 import com.handu.open.dubbo.monitor.domain.ApplicationServiceMethod;
 import com.handu.open.dubbo.monitor.domain.DubboDelay;
 import com.handu.open.dubbo.monitor.domain.DubboInvokeLineChart;
 import com.handu.open.dubbo.monitor.domain.LineChartSeries;
 import com.handu.open.dubbo.monitor.service.DubboDelayService;
 import com.handu.open.dubbo.monitor.support.CommonResponse;
-import com.handu.open.dubbo.monitor.vo.LowQueryVo;
+import com.handu.open.dubbo.monitor.vo.SlowQueryVo;
 
 @Controller
 @RequestMapping("/slowquery/charts")
@@ -28,18 +29,22 @@ public class SlowChartsController {
 	public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 	@Autowired
 	private DubboDelayService dubboDelayService;
+	@Autowired
+	private ApplicationServiceBaseDAO applicationServiceBaseDAO;
 
 	@RequestMapping(method = RequestMethod.GET)
-	public String index(@ModelAttribute LowQueryVo vo, Model model) {
+	public String index(@ModelAttribute SlowQueryVo vo, Model model) {
 		DubboDelay dubboInvoke = new DubboDelay();
 		dubboInvoke.setServiceId(vo.getServiceId());
+		vo.setServiceName(applicationServiceBaseDAO.getApplicationServiceById(
+				vo.getServiceId()).getName());
 		if (vo.getInvokeDateFrom() == null || vo.getInvokeDateTo() == null) {
 			dubboInvoke.setInvokeDate(new Date());
 		} else {
 			FastDateFormat fdf = FastDateFormat.getInstance(DATETIME_FORMAT);
 			try {
 				dubboInvoke.setInvokeDateFrom(fdf.parse(vo.getInvokeDateFrom() + " 00:00:00"));
-				dubboInvoke.setInvokeDateTo(fdf.parse(vo.getInvokeDateFrom() + " 23:59:59"));
+				dubboInvoke.setInvokeDateTo(fdf.parse(vo.getInvokeDateTo() + " 23:59:59"));
 			} catch (ParseException e) {
 				dubboInvoke.setInvokeDate(new Date());
 			}
@@ -47,15 +52,13 @@ public class SlowChartsController {
 
 		// 获取Service方法
 		List<ApplicationServiceMethod> methodList = dubboDelayService.getMethodsByService(dubboInvoke);
+		List<String> methods = new ArrayList<String>();
 		if (methodList != null && methodList.size() > 0) {
-			vo.setServiceName(methodList.get(0).getServiceName());
-			List<String> methods = new ArrayList<String>();
 			for (ApplicationServiceMethod m : methodList) {
 				methods.add(m.getName());
 			}
-			model.addAttribute("rows", methods);
 		}
-
+		model.addAttribute("rows", methods);
 		model.addAttribute("vo", vo);
 
 		return "slowquery/charts";
@@ -76,8 +79,6 @@ public class SlowChartsController {
 		List<double[]> qpsSeriesDatas;
 		List<double[]> artSeriesDatas;
 		List<ApplicationServiceMethod> methodList = dubboDelayService.getMethodsByService(dubboInvoke);
-		// List<String> methods =
-		// dubboMonitorService.getMethodsByService(dubboInvoke);
 		for (ApplicationServiceMethod method : methodList) {
 			qpsLineChart = new DubboInvokeLineChart();
 			artLineChart = new DubboInvokeLineChart();
