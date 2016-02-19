@@ -1,12 +1,10 @@
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class DubboDelay implements Serializable {
+public class DubboDelay extends PersistentObject {
 	private static final long serialVersionUID = 2574275812067932169L;
 
-	private Long id;
 	private Date invokeDate;
 	private Long serviceId;
 	private Long methodId;
@@ -19,7 +17,7 @@ public class DubboDelay implements Serializable {
 	private int concurrent;
 	private int maxElapsed;
 	private int maxConcurrent;
-	private long invokeTime;
+	private Long invokeTime;
 	// ====================查询辅助参数===================
 	/**
 	 * 统计时间粒度(毫秒)
@@ -27,14 +25,6 @@ public class DubboDelay implements Serializable {
 	private long timeParticle = 60000;
 	private Date invokeDateFrom;
 	private Date invokeDateTo;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Date getInvokeDate() {
 		return invokeDate;
@@ -132,11 +122,11 @@ public class DubboDelay implements Serializable {
 		this.maxConcurrent = maxConcurrent;
 	}
 
-	public long getInvokeTime() {
+	public Long getInvokeTime() {
 		return invokeTime;
 	}
 
-	public void setInvokeTime(long invokeTime) {
+	public void setInvokeTime(Long invokeTime) {
 		this.invokeTime = invokeTime;
 	}
 

@@ -1,29 +1,18 @@
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
-
-public class ZabbixInvoke implements Serializable {
+public class ZabbixInvoke extends PersistentObject {
 	private static final long serialVersionUID = -5482989839944949144L;
 
-	private long id;
 	private String service;
 	private String method;
 	private String provider;
-	private long invokeTime;
+	private Long invokeTime;
 	private int success;
 	private int failure;
 	private int elapsed;
 	private int concurrent;
 	private int maxElapsed;
 	private int maxConcurrent;
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
 
 	public String getService() {
 		return service;
@@ -49,11 +38,11 @@ public class ZabbixInvoke implements Serializable {
 		this.provider = provider;
 	}
 
-	public long getInvokeTime() {
+	public Long getInvokeTime() {
 		return invokeTime;
 	}
 
-	public void setInvokeTime(long invokeTime) {
+	public void setInvokeTime(Long invokeTime) {
 		this.invokeTime = invokeTime;
 	}
 

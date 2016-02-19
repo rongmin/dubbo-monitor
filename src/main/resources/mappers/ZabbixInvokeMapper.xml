@@ -49,7 +49,7 @@
     <update id="updateZabbixInvoke" parameterType="ZabbixInvoke">
 		update zabbix_invoke 
 		<set>
-			<if test="invokeDate != null">
+			<if test="invokeTime != null">
 				invoke_time = #{invokeTime},
 			</if>
 			success = #{success},

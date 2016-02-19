@@ -264,7 +264,7 @@ public class RegistryContainer {
 				Map<String, List<URL>> consumerMap = new HashMap<String, List<URL>>();
 				Set<String> notifyApps = new HashSet<String>();
 				for (URL url : urls) {
-					logger.warn("notify url: " + url);
+					logger.debug("notify url: " + url);
 					String application = url
 							.getParameter(Constants.APPLICATION_KEY);
 					String service = url.getServiceInterface();

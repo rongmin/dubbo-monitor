@@ -17,12 +17,7 @@ package com.handu.open.dubbo.monitor.domain;
 
 public class StatsTable implements Comparable<StatsTable> {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5468082346847524044L;
-
-	private long methodId;
+	private Long methodId;
 	private String serviceName, methodName;
 	private long successProvider, failureProvider, elapsedProvider;
 	private long successConsumer, failureConsumer, elapsedConsumer;
@@ -41,7 +36,7 @@ public class StatsTable implements Comparable<StatsTable> {
 	/**
 	 * @return the methodId
 	 */
-	public long getMethodId() {
+	public Long getMethodId() {
 		return methodId;
 	}
 
@@ -49,7 +44,7 @@ public class StatsTable implements Comparable<StatsTable> {
 	/**
 	 * @param methodId the methodId to set
 	 */
-	public void setMethodId(long methodId) {
+	public void setMethodId(Long methodId) {
 		this.methodId = methodId;
 	}
 

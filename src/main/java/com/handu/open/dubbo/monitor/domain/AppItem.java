@@ -1,28 +1,26 @@
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
-
-public class AppItem implements Serializable {
+/**
+ * Application
+ * 
+ * @author Jack
+ *
+ */
+public class AppItem extends PersistentObject {
 	private static final long serialVersionUID = 7154467856109028794L;
 
-	private Long id;
 	private String name;
-	private Integer providerNum;
-	private String owner;
+	private String owner;// 提供者
+	// 预先定义的提供者及数目
+	private int providerNum;
 	private String provider;
-	// 共页面显示使用,当前容器中注册的提供者及个数
-	private Integer registerNum;
+
+	/*** 供页面显示使用 ***/
+	// 当前容器中自动注册的提供者及数目
+	private int registerNum;
 	private String register;
-	private boolean diff = false;
-	private boolean numDiff = false;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private boolean diff = false;// 提供者是否一致
+	private boolean numDiff = false;// 提供数是否一致
 
 	public String getName() {
 		return name;
@@ -30,14 +28,6 @@ public class AppItem implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Integer getProviderNum() {
-		return providerNum;
-	}
-
-	public void setProviderNum(Integer providerNum) {
-		this.providerNum = providerNum;
 	}
 
 	public String getOwner() {
@@ -48,6 +38,14 @@ public class AppItem implements Serializable {
 		this.owner = owner;
 	}
 
+	public int getProviderNum() {
+		return providerNum;
+	}
+
+	public void setProviderNum(int providerNum) {
+		this.providerNum = providerNum;
+	}
+
 	public String getProvider() {
 		return provider;
 	}
@@ -56,11 +54,11 @@ public class AppItem implements Serializable {
 		this.provider = provider;
 	}
 
-	public Integer getRegisterNum() {
+	public int getRegisterNum() {
 		return registerNum;
 	}
 
-	public void setRegisterNum(Integer registerNum) {
+	public void setRegisterNum(int registerNum) {
 		this.registerNum = registerNum;
 	}
 

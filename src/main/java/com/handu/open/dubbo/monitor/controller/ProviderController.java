@@ -27,7 +27,7 @@ public class ProviderController {
 			AppItem regItem = registryContainer.getHostsByApplication(item.getName());
 			item.setRegister(regItem.getProvider());
 			item.setRegisterNum(regItem.getProviderNum());
-			if (!item.getProviderNum().equals(item.getRegisterNum())) {
+			if (item.getProviderNum() != item.getRegisterNum()) {
 				item.setNumDiff(true);
 			}
 			if (!item.getProvider().equals(item.getRegister())) {

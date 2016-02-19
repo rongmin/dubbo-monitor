@@ -15,63 +15,26 @@
  */
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
-
-public class ApplicationServiceMethod implements Serializable {
-
-	/**
-	 * 
-	 */
+public class ApplicationServiceMethod extends PersistentObject {
 	private static final long serialVersionUID = -5468082346847524044L;
 
-	private Long id;
 	private Long serviceId;
 	private String name;
 	private String serviceName;
-
 	private int maxtimeProvider, maxtimeConsumer;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	/**
-	 * @return the serviceId
-	 */
 	public Long getServiceId() {
 		return serviceId;
 	}
 
-	/**
-	 * @param serviceId
-	 *            the serviceId to set
-	 */
 	public void setServiceId(Long serviceId) {
 		this.serviceId = serviceId;
 	}
 
-	/**
-	 * @return the name
-	 */
 	public String getName() {
 		return name;
 	}
 
-	/**
-	 * @param name
-	 *            the name to set
-	 */
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -84,32 +47,18 @@ public class ApplicationServiceMethod implements Serializable {
 		this.serviceName = serviceName;
 	}
 
-	/**
-	 * @return the maxtimeProvider
-	 */
 	public int getMaxtimeProvider() {
 		return maxtimeProvider;
 	}
 
-	/**
-	 * @param maxtimeProvider
-	 *            the maxtimeProvider to set
-	 */
 	public void setMaxtimeProvider(int maxtimeProvider) {
 		this.maxtimeProvider = maxtimeProvider;
 	}
 
-	/**
-	 * @return the maxtimeConsumer
-	 */
 	public int getMaxtimeConsumer() {
 		return maxtimeConsumer;
 	}
 
-	/**
-	 * @param maxtimeConsumer
-	 *            the maxtimeConsumer to set
-	 */
 	public void setMaxtimeConsumer(int maxtimeConsumer) {
 		this.maxtimeConsumer = maxtimeConsumer;
 	}

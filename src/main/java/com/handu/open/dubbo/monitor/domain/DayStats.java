@@ -15,26 +15,16 @@
  */
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class DayStats implements Serializable {
+public class DayStats extends PersistentObject {
 	private static final long serialVersionUID = -5468082346847524044L;
 
-	private Long id;
 	private Date invokeDate;
 	private Long serviceId;
 	private Long methodId;
 	private long successProvider, failureProvider, elapsedProvider;
 	private long successConsumer, failureConsumer, elapsedConsumer;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Date getInvokeDate() {
 		return invokeDate;
@@ -106,13 +96,5 @@ public class DayStats implements Serializable {
 
 	public void setElapsedConsumer(long elapsedConsumer) {
 		this.elapsedConsumer = elapsedConsumer;
-	}
-
-	@Override
-	public String toString() {
-		return "DayStats [id=" + id + ", invokeDate=" + invokeDate + ", serviceId=" + serviceId + ", methodId="
-				+ methodId + ", successProvider=" + successProvider + ", failureProvider=" + failureProvider
-				+ ", elapsedProvider=" + elapsedProvider + ", successConsumer=" + successConsumer + ", failureConsumer="
-				+ failureConsumer + ", elapsedConsumer=" + elapsedConsumer + "]";
 	}
 }

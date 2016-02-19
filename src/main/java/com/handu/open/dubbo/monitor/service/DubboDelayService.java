@@ -35,16 +35,15 @@ public class DubboDelayService {
 	public void addSlowElapse(DubboDelay obj, long elapse) {
 		if (obj.getElapsed() > elapse * obj.getSuccess()) {
 			dubboInvokeDAO.insert(CLASSNAME, "addEntity", obj);
-			
+			delayStatusHandler.add(obj);
 		}
-		//TODO 为了测试数据，暂时放在if外面
-		delayStatusHandler.add(obj);
 	}
 
 	public void add(DubboInvoke obj) {
 		Long slowElapse = new Long(env.getProperty("monitor.slowElapse", "0"));
 		ApplicationServiceMethod asmObj = asmDao.getByServiceAndMethod(obj);
 		if (asmObj == null) {// 未定义方法慢查
+			logger.warn("undefined method slow elapse.");
 			return;
 		}
 		DubboDelay dubboDelay = new DubboDelay();

@@ -1,29 +1,18 @@
 package com.handu.open.dubbo.monitor.domain;
 
-import java.io.Serializable;
-
 /**
- * 当注册服务的APP数目低于提供数时，记录流水
+ * 当自动注册服务的APP数目低于预先定义的数目时，记录流水
  * 
  * @author Jack
  *
  */
-public class AppAlarm implements Serializable {
+public class AppAlarm extends PersistentObject {
 	private static final long serialVersionUID = 3118713652830235205L;
 
-	private Long id;
 	private Long appId;
-	private Integer providerNum;
-	private Integer registerCount;
+	private int providerNum;
+	private int registerCount;
 	private Long invokeTime;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getAppId() {
 		return appId;
@@ -33,19 +22,19 @@ public class AppAlarm implements Serializable {
 		this.appId = appId;
 	}
 
-	public Integer getProviderNum() {
+	public int getProviderNum() {
 		return providerNum;
 	}
 
-	public void setProviderNum(Integer providerNum) {
+	public void setProviderNum(int providerNum) {
 		this.providerNum = providerNum;
 	}
 
-	public Integer getRegisterCount() {
+	public int getRegisterCount() {
 		return registerCount;
 	}
 
-	public void setRegisterCount(Integer registerCount) {
+	public void setRegisterCount(int registerCount) {
 		this.registerCount = registerCount;
 	}
 
