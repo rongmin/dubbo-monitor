@@ -69,7 +69,7 @@ public class IndexController {
         Map dubboInvokeMap = dubboMonitorService.countDubboInvokeTopTen(dubboInvoke);
         List<DubboInvoke> success = (List<DubboInvoke>) dubboInvokeMap.get("success");
         for (DubboInvoke di : success) {
-            sxAxisCategories.add(di.getMethod());
+            sxAxisCategories.add(di.getMethod()+"("+di.getService()+")");
             data = new double[]{di.getSuccess()};
             sdataList.add(data);
         }
@@ -89,7 +89,7 @@ public class IndexController {
         List<double[]> fdataList = Lists.newArrayList();
         List<DubboInvoke> failure = (List<DubboInvoke>) dubboInvokeMap.get("failure");
         for (DubboInvoke di : failure) {
-            fxAxisCategories.add(di.getMethod());
+            fxAxisCategories.add(di.getMethod()+"("+di.getService()+")");
             data = new double[]{di.getFailure()};
             fdataList.add(data);
         }
